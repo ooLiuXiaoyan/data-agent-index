@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库智能体 - 案例演示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary-blue: #1a5fb4;
+            --dark-blue: #0d3a7a;
+            --light-blue: #e8f4fd;
+            --accent-blue: #3584e4;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a5a5a;
+            --white: #ffffff;
+            --border-color: #d0e3f0;
+            --shadow: 0 4px 20px rgba(26, 95, 180, 0.15);
+            --shadow-hover: 0 8px 30px rgba(26, 95, 180, 0.25);
+            --radius: 12px;
+            --radius-lg: 20px;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1a5fb4 0%, #0d3a7a 100%);
+            padding: 0 40px;
+            box-shadow: 0 4px 20px rgba(13, 58, 122, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .logo i { font-size: 28px; }
+
+        .nav-tabs { display: flex; gap: 8px; }
+
+        .nav-tab {
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            margin-top: 70px;
+            padding: 40px;
+            max-width: 1600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .page-title {
+            font-size: 42px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .page-title i { color: var(--accent-blue); }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--light-blue);
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--primary-blue);
+            margin-top: 15px;
+        }
+
+        .api-status.online { background: #d4edda; color: #155724; }
+        .api-status.offline { background: #f8d7da; color: #721c24; }
+
+        .chat-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+            height: calc(100vh - 280px);
+            min-height: 550px;
+        }
+
+        .sidebar {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .upload-area {
+            border: 3px dashed var(--border-color);
+            border-radius: var(--radius);
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--light-blue);
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent-blue);
+            background: #dceefb;
+        }
+
+        .upload-area.uploading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            color: var(--accent-blue);
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 15px;
+            color: var(--dark-blue);
+            font-weight: 500;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .upload-progress {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .upload-progress.active { display: block; }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--primary-blue));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .file-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .file-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .file-list-title {
+            font-size: 16px;
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-count {
+            background: var(--accent-blue);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--light-blue);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: #dceefb;
+            transform: translateX(5px);
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .file-icon.pdf { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .file-icon.doc { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .file-icon.docx { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .file-icon.txt { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+        .file-icon.code { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .file-icon.gis { background: linear-gradient(135deg, #f39c12, #d68910); }
+
+        .file-info { flex: 1; min-width: 0; }
+
+        .file-name {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .file-status {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .file-status.parsed { background: #d4edda; color: #155724; }
+        .file-status.indexed { background: #cce5ff; color: #004085; }
+        .file-status.pending { background: #fff3cd; color: #856404; }
+
+        .chat-main {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px 25px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            max-width: 90%;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .avatar.ai {
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            color: white;
+        }
+
+        .avatar.user {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .message-content {
+            background: var(--light-blue);
+            padding: 18px 22px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            max-width: calc(100% - 60px);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            color: white;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-text {
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .message-text pre {
+            background: rgba(0,0,0,0.05);
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .message.user .message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .source-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .source-tag {
+            padding: 6px 12px;
+            background: white;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .source-tag:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .source-tag i { font-size: 11px; }
+
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 10px 0;
+        }
+
+        .typing-indicator span {
+            width: 10px;
+            height: 10px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            padding: 15px 25px;
+            background: #f8fbff;
+            border-top: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        .chat-input-area {
+            padding: 20px 25px;
+            background: #f8fbff;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 15px;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            max-height: 120px;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(53, 132, 228, 0.1);
+        }
+
+        .send-btn {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(26, 95, 180, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(26, 95, 180, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .viz-container {
+            margin-top: 30px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+
+        .viz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .viz-title {
+            font-size: 20px;
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .viz-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .viz-btn {
+            padding: 10px 20px;
+            background: var(--light-blue);
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--primary-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .viz-btn:hover { background: var(--accent-blue); color: white; }
+        .viz-btn.active { background: var(--accent-blue); color: white; }
+
+        .viz-content {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            min-height: 350px;
+            padding: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-message.show { display: block; }
+
+        @media (max-width: 1200px) {
+            .chat-container { grid-template-columns: 1fr; }
+            .sidebar { max-height: 300px; }
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 20px; }
+            .page-title { font-size: 28px; }
+            .chat-container { height: auto; }
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--light-blue); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-blue); }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            <span>知识库智能体</span>
+        </div>
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab">
+                <i class="fas fa-sitemap"></i>
+                <span>技术路线</span>
+            </a>
+            <a href="demo.html" class="nav-tab" style="background: var(--white); color: var(--primary-blue);">
+                <i class="fas fa-rocket"></i>
+                <span>案例演示</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-rocket"></i>
+                智能知识问答演示
+            </h1>
+            <p class="page-subtitle">
+                基于真实向量数据库的智能问答系统，支持PDF文档检索与语义搜索
+            </p>
+            <div class="api-status offline" id="apiStatus">
+                <i class="fas fa-circle"></i>
+                <span>正在连接API服务...</span>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="chat-container">
+            <!-- 侧边栏 -->
+            <div class="sidebar">
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <div class="upload-text">点击或拖拽上传文件</div>
+                    <div class="upload-hint">支持 PDF、Word、代码文件</div>
+                    <div class="upload-progress" id="uploadProgress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 5px;">上传中...</div>
+                    </div>
+                    <input type="file" id="fileInput" style="display: none" accept=".pdf,.doc,.docx,.txt,.py,.js" onchange="handleFileUpload(this.files[0])">
+                </div>
+
+                <div class="file-list">
+                    <div class="file-list-header">
+                        <h4 class="file-list-title">
+                            <i class="fas fa-folder-open"></i>
+                            知识库文件
+                        </h4>
+                        <span class="file-count" id="fileCount">0</span>
+                    </div>
+                    <div id="fileList">
+                        <!-- 动态加载 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 聊天主区域 -->
+            <div class="chat-main">
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <i class="fas fa-robot"></i>
+                        知识库智能助手
+                    </div>
+                    <div class="chat-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-database"></i>
+                            <span id="docCount">0 文档</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-vector-square"></i>
+                            <span>768 维</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
+                    <!-- AI欢迎消息 -->
+                    <div class="message ai">
+                        <div class="avatar ai">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                👋 您好！我是基于真实向量数据库的智能助手。
+                                <br><br>
+                                当前知识库已加载 <b>浙江省测量标志保护改革技术方案.pdf</b> 等文档。
+                                <br><br>
+                                您可以询问：
+                                <br>📄 文档内容相关问题
+                                <br>🔍 基于语义的内容检索
+                                <br>📊 知识库统计分析
+                            </div>
+                            <div class="message-time">系统就绪</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="sendQuickMessage('测量标志保护的主要措施有哪些？')">
+                        <i class="fas fa-shield-alt"></i>保护措施
+                    </button>
+                    <button class="action-btn" onclick="sendQuickMessage('技术方案的改革目标是什么？')">
+                        <i class="fas fa-bullseye"></i>改革目标
+                    </button>
+                    <button class="action-btn" onclick="sendQuickMessage('浙江省测量标志的现状如何？')">
+                        <i class="fas fa-map-marker-alt"></i>现状分析
+                    </button>
+                    <button class="action-btn" onclick="sendQuickMessage('实施方案有哪些关键步骤？')">
+                        <i class="fas fa-tasks"></i>实施步骤
+                    </button>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <textarea 
+                            class="chat-input" 
+                            id="chatInput" 
+                            rows="1" 
+                            placeholder="输入您的问题，基于真实知识库进行语义检索..."
+                            onkeypress="handleKeyPress(event)"
+                        ></textarea>
+                        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据可视化区域 -->
+        <div class="viz-container">
+            <div class="viz-header">
+                <h3 class="viz-title">
+                    <i class="fas fa-chart-pie"></i>
+                    知识库数据分析
+                </h3>
+                <div class="viz-controls">
+                    <button class="viz-btn active" onclick="switchViz('stats')">
+                        <i class="fas fa-chart-bar"></i>统计概览
+                    </button>
+                    <button class="viz-btn" onclick="switchViz('files')">
+                        <i class="fas fa-file-alt"></i>文件列表
+                    </button>
+                </div>
+            </div>
+            <div class="viz-content" id="vizContent">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="statTotalDocs">-</div>
+                        <div class="stat-label">向量文档数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statFiles">-</div>
+                        <div class="stat-label">源文件数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">768</div>
+                        <div class="stat-label">向量维度</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">BGE</div>
+                        <div class="stat-label">Embedding模型</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API配置
+        const API_BASE = 'http://localhost:8000';
+        let apiConnected = false;
+        let sessionId = generateSessionId();
+
+        // 生成会话ID
+        function generateSessionId() {
+            return 'session_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // 检查API状态
+        async function checkApiStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/`, { 
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    apiConnected = true;
+                    updateApiStatus(true, data.document_count);
+                    loadFiles();
+                    loadStats();
+                }
+            } catch (error) {
+                apiConnected = false;
+                updateApiStatus(false);
+            }
+        }
+
+        // 更新API状态显示
+        function updateApiStatus(online, docCount = 0) {
+            const statusEl = document.getElementById('apiStatus');
+            if (online) {
+                statusEl.className = 'api-status online';
+                statusEl.innerHTML = `<i class="fas fa-circle"></i><span>API已连接 (${docCount} 文档)</span>`;
+            } else {
+                statusEl.className = 'api-status offline';
+                statusEl.innerHTML = `<i class="fas fa-circle"></i><span>API未连接 - 请先运行 api_server.py</span>`;
+            }
+        }
+
+        // 加载文件列表
+        async function loadFiles() {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/files`);
+                const data = await response.json();
+                
+                const fileList = document.getElementById('fileList');
+                const fileCount = document.getElementById('fileCount');
+                
+                fileCount.textContent = data.files.length;
+                
+                if (data.files.length === 0) {
+                    fileList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">暂无文件</div>';
+                    return;
+                }
+                
+                fileList.innerHTML = data.files.map(file => `
+                    <div class="file-item">
+                        <div class="file-icon ${file.type}">
+                            <i class="fas fa-file-${getFileIcon(file.type)}"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-meta">${file.size} · ${file.upload_time}</div>
+                        </div>
+                        <span class="file-status ${file.status === '已解析' ? 'parsed' : file.status === '已入库' ? 'indexed' : 'pending'}">${file.status}</span>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('加载文件列表失败:', error);
+            }
+        }
+
+        // 获取文件图标
+        function getFileIcon(type) {
+            const iconMap = {
+                'pdf': 'pdf',
+                'doc': 'word',
+                'docx': 'word',
+                'txt': 'alt',
+                'py': 'code',
+                'js': 'code'
+            };
+            return iconMap[type] || 'alt';
+        }
+
+        // 加载统计信息
+        async function loadStats() {
+            if (!apiConnected) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/stats`);
+                const data = await response.json();
+                
+                document.getElementById('statTotalDocs').textContent = data.total_documents || 0;
+                document.getElementById('statFiles').textContent = data.unique_files || 0;
+                document.getElementById('docCount').textContent = (data.total_documents || 0) + ' 文档';
+                
+            } catch (error) {
+                console.error('加载统计失败:', error);
+            }
+        }
+
+        // 文件上传
+        async function handleFileUpload(file) {
+            if (!file) return;
+            
+            if (!apiConnected) {
+                showError('API未连接，请先启动后端服务');
+                return;
+            }
+            
+            const uploadArea = document.getElementById('uploadArea');
+            const progressEl = document.getElementById('uploadProgress');
+            const progressFill = document.getElementById('progressFill');
+            
+            uploadArea.classList.add('uploading');
+            progressEl.classList.add('active');
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                // 模拟进度
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 10;
+                    if (progress <= 90) {
+                        progressFill.style.width = progress + '%';
+                    }
+                }, 200);
+                
+                const response = await fetch(`${API_BASE}/api/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                clearInterval(progressInterval);
+                progressFill.style.width = '100%';
+                
+                const data = await response.json();
+                
+                setTimeout(() => {
+                    uploadArea.classList.remove('uploading');
+                    progressEl.classList.remove('active');
+                    progressFill.style.width = '0%';
+                    
+                    if (data.success) {
+                        addMessage(`✅ 文件上传成功：${data.file_name}`, 'ai');
+                        loadFiles();
+                        loadStats();
+                    } else {
+                        showError(data.message || '上传失败');
+                    }
+                }, 500);
+                
+            } catch (error) {
+                uploadArea.classList.remove('uploading');
+                progressEl.classList.remove('active');
+                showError('上传失败: ' + error.message);
+            }
+        }
+
+        // 发送消息
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            if (!apiConnected) {
+                showError('API未连接，请先启动后端服务 (python3 api_server.py)');
+                return;
+            }
+            
+            // 添加用户消息
+            addMessage(message, 'user');
+            input.value = '';
+            input.rows = 1;
+            
+            // 禁用发送按钮
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            
+            // 显示正在输入
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: sessionId
+                    })
+                });
+                
+                removeTypingIndicator();
+                
+                const data = await response.json();
+                
+                // 添加AI回复
+                addAIResponse(data);
+                
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('❌ 请求失败: ' + error.message + '\n\n请确保API服务已启动: python3 api_server.py', 'ai');
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+
+        // 添加快捷消息
+        function sendQuickMessage(message) {
+            document.getElementById('chatInput').value = message;
+            sendMessage();
+        }
+
+        // 处理回车键
+        function handleKeyPress(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // 添加消息到聊天区域
+        function addMessage(text, sender) {
+            const container = document.getElementById('chatMessages');
+            const time = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            
+            const messageHtml = `
+                <div class="message ${sender}">
+                    <div class="avatar ${sender}">
+                        <i class="fas fa-${sender === 'ai' ? 'robot' : 'user'}"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(text).replace(/\n/g, '<br>')}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', messageHtml);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 添加AI响应（包含来源）
+        function addAIResponse(data) {
+            const container = document.getElementById('chatMessages');
+            const time = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            
+            let sourceTags = '';
+            if (data.sources && data.sources.length > 0) {
+                sourceTags = '<div class="source-tags">' + 
+                    data.sources.slice(0, 3).map(s => `
+                        <span class="source-tag" title="${escapeHtml(s.preview)}">
+                            <i class="fas fa-file"></i>
+                            ${escapeHtml(s.file)} (${s.similarity})
+                        </span>
+                    `).join('') + 
+                '</div>';
+            }
+            
+            const messageHtml = `
+                <div class="message ai">
+                    <div class="avatar ai">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">${escapeHtml(data.answer).replace(/\n/g, '<br>')}</div>
+                        ${sourceTags}
+                        <div class="message-time">${time}</div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', messageHtml);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 显示输入指示器
+        function showTypingIndicator() {
+            const container = document.getElementById('chatMessages');
+            const indicator = `
+                <div class="message ai" id="typingIndicator">
+                    <div class="avatar ai">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', indicator);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 移除输入指示器
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        // 显示错误
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        // HTML转义
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 切换可视化
+        function switchViz(type) {
+            // 更新按钮状态
+            document.querySelectorAll('.viz-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.viz-btn').classList.add('active');
+            
+            const content = document.getElementById('vizContent');
+            
+            if (type === 'stats') {
+                content.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="statTotalDocs2">${document.getElementById('statTotalDocs').textContent}</div>
+                            <div class="stat-label">向量文档数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="statFiles2">${document.getElementById('statFiles').textContent}</div>
+                            <div class="stat-label">源文件数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">768</div>
+                            <div class="stat-label">向量维度</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">BGE</div>
+                            <div class="stat-label">Embedding模型</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'files') {
+                const fileItems = document.querySelectorAll('.file-item');
+                let filesHtml = '';
+                fileItems.forEach(item => {
+                    const name = item.querySelector('.file-name').textContent;
+                    const meta = item.querySelector('.file-meta').textContent;
+                    filesHtml += `<div style="padding: 10px; background: white; border-radius: 8px; margin-bottom: 10px;"><strong>${name}</strong><br><small style="color: var(--text-secondary);">${meta}</small></div>`;
+                });
+                content.innerHTML = filesHtml || '<div style="text-align: center; color: var(--text-secondary);">暂无文件</div>';
+            }
+        }
+
+        // 拖拽上传
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.addEventListener('dragover', (e) => { 
+            e.preventDefault(); 
+            uploadArea.style.borderColor = 'var(--accent-blue)';
+        });
+        uploadArea.addEventListener('dragleave', () => { 
+            uploadArea.style.borderColor = '';
+        });
+        uploadArea.addEventListener('drop', (e) => { 
+            e.preventDefault(); 
+            uploadArea.style.borderColor = '';
+            const file = e.dataTransfer.files[0];
+            if (file) handleFileUpload(file);
+        });
+
+        // 输入框自适应高度
+        const chatInput = document.getElementById('chatInput');
+        chatInput.addEventListener('input', function() {
+            this.rows = 1;
+            const rows = Math.ceil(this.scrollHeight / 24);
+            this.rows = Math.min(rows, 5);
+        });
+
+        // 页面加载完成后检查API状态
+        document.addEventListener('DOMContentLoaded', () => {
+            checkApiStatus();
+            // 定时刷新状态
+            setInterval(checkApiStatus, 10000);
+        });
+    </script>
+</body>
+</html>

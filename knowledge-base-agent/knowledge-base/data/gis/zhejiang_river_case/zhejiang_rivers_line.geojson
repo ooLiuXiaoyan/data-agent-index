@@ -1,0 +1,19 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "properties": {
+            "name": "浙江省主要河流",
+            "type": "河流"
+        },
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [120.100, 30.350],
+                [120.180, 30.320],
+                [120.260, 30.280],
+                [120.340, 30.240]
+            ]
+        }
+    }]
+}
