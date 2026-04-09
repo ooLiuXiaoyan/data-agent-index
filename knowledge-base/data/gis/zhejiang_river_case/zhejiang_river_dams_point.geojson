@@ -1,0 +1,28 @@
+{
+    "type": "FeatureCollection",
+    "features": [{
+            "type": "Feature",
+            "properties": {
+                "name": "浙江省河流堤坝A",
+                "type": "堤坝",
+                "river": "主要河流"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [120.220, 30.300]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "浙江省河流堤坝B",
+                "type": "堤坝",
+                "river": "主要河流"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [120.300, 30.260]
+            }
+        }
+    ]
+}
