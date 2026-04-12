@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>知识库智能体 - 案例演示</title>
+    <title>知识库智能体系统 - 案例演示</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -77,6 +78,11 @@
         .nav-tab:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary-blue);
         }
 
         .main-content {
@@ -676,7 +682,11 @@
                 <i class="fas fa-sitemap"></i>
                 <span>技术路线</span>
             </a>
-            <a href="demo.html" class="nav-tab" style="background: var(--white); color: var(--primary-blue);">
+            <a href="deployment.html" class="nav-tab">
+                <i class="fas fa-server"></i>
+                <span>部署案例</span>
+            </a>
+            <a href="demo.html" class="nav-tab active">
                 <i class="fas fa-rocket"></i>
                 <span>案例演示</span>
             </a>

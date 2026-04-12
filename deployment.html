@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库智能体系统 - 部署案例</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+         :root {
+            --primary-blue: #1a5fb4;
+            --dark-blue: #0d3a7a;
+            --light-blue: #e8f4fd;
+            --accent-blue: #3584e4;
+            --sky-blue: #62a0ea;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a5a5a;
+            --white: #ffffff;
+            --border-color: #d0e3f0;
+            --shadow: 0 4px 20px rgba(26, 95, 180, 0.15);
+            --shadow-hover: 0 8px 30px rgba(26, 95, 180, 0.25);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --success-green: #28a745;
+            --warning-orange: #f0ad4e;
+            --danger-red: #dc3545;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        /* 导航栏 */
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--gradient-start, #1a5fb4) 0%, var(--gradient-end, #0d3a7a) 100%);
+            padding: 0 40px;
+            box-shadow: 0 4px 20px rgba(13, 58, 122, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-tab {
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary-blue);
+        }
+        
+        .main-content {
+            margin-top: 70px;
+            padding: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .page-title {
+            font-size: 38px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-title i {
+            color: var(--accent-blue);
+        }
+        
+        .page-subtitle {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* 案例概览卡片 */
+        
+        .case-overview {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .case-badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+        }
+        
+        .case-title-section h2 {
+            font-size: 26px;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        
+        .case-title-section p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+        /* 环境配置 */
+        
+        .env-section {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .env-title {
+            font-size: 18px;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .env-title i {
+            color: var(--accent-blue);
+        }
+        
+        .env-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .env-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .env-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .env-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .env-info {
+            flex: 1;
+        }
+        
+        .env-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+        }
+        
+        .env-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        /* 技术栈 */
+        
+        .tech-stack-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--accent-blue);
+        }
+        
+        .tech-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .tech-card {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .tech-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .tech-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .tech-card-icon.ollama {
+            background: linear-gradient(135deg, #FF6B6B, #EE5A24);
+        }
+        
+        .tech-card-icon.llm {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+        }
+        
+        .tech-card-icon.embedding {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .tech-card-icon.client {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .tech-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .tech-card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .tech-card-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .tech-card-content code {
+            background: #e8f4fd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--primary-blue);
+        }
+        /* 知识库案例 */
+        
+        .kb-section {
+            margin-bottom: 30px;
+        }
+        
+        .kb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+        
+        @media (max-width: 900px) {
+            .kb-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .kb-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .kb-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .kb-card.seismic {
+            border-top: 4px solid #e74c3c;
+        }
+        
+        .kb-card.contract {
+            border-top: 4px solid #27ae60;
+        }
+        
+        .kb-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .kb-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+        }
+        
+        .kb-icon.seismic {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .kb-icon.contract {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+        }
+        
+        .kb-title h3 {
+            font-size: 20px;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        
+        .kb-title span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .kb-content {
+            margin-bottom: 20px;
+        }
+        
+        .kb-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .kb-data-case {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px dashed var(--border-color);
+        }
+        
+        .kb-data-case-title {
+            font-size: 13px;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .kb-data-case-content {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        
+        .kb-stats {
+            display: flex;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .kb-stat {
+            text-align: center;
+        }
+        
+        .kb-stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+        
+        .kb-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        /* 改进建议 */
+        
+        .improvement-section {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            border: 2px dashed #ffb300;
+            margin-bottom: 30px;
+        }
+        
+        .improvement-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .improvement-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #ffb300, #ff8f00);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+        }
+        
+        .improvement-title {
+            font-size: 22px;
+            color: var(--dark-blue);
+        }
+        
+        .improvement-title span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: normal;
+            margin-top: 5px;
+        }
+        
+        .improvement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .improvement-item {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .improvement-item:hover {
+            border-color: #ffb300;
+            transform: translateX(5px);
+        }
+        
+        .improvement-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .improvement-item-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ffb300, #ff8f00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .improvement-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .improvement-item-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .improvement-solution {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .improvement-solution-title {
+            font-size: 12px;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .improvement-solution-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        /* 架构图 */
+        
+        .arch-diagram {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .arch-layer {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--border-color);
+        }
+        
+        .arch-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        
+        .arch-content {
+            flex: 1;
+        }
+        
+        .arch-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 8px;
+        }
+        
+        .arch-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .arch-arrow {
+            text-align: center;
+            color: var(--accent-blue);
+            font-size: 20px;
+        }
+        /* 操作步骤 */
+        
+        .steps-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .step-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--border-color);
+        }
+        
+        .step-number {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 8px;
+        }
+        
+        .step-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        
+        .step-code {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        
+        .step-code code {
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        /* 响应式 */
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            .page-title {
+                font-size: 28px;
+            }
+            .nav-tab span {
+                display: none;
+            }
+            .kb-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+         ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: var(--light-blue);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: var(--accent-blue);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-blue);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-robot"></i>
+            <span>知识库智能体</span>
+        </div>
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab">
+                <i class="fas fa-sitemap"></i>
+                <span>技术路线</span>
+            </a>
+            <a href="deployment.html" class="nav-tab active">
+                <i class="fas fa-server"></i>
+                <span>部署案例</span>
+            </a>
+            <a href="demo.html" class="nav-tab">
+                <i class="fas fa-rocket"></i>
+                <span>案例演示</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-server"></i> 私有化部署实战案例
+            </h1>
+            <p class="page-subtitle">
+                基于 Ollama + DeepSeek + Nomic-Embed + Cherry Studio 的本地知识库建设方案
+            </p>
+        </div>
+
+        <!-- 案例概览 -->
+        <div class="case-overview">
+            <div class="case-header">
+                <div class="case-badge">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="case-title-section">
+                    <h2>本地私有化部署方案</h2>
+                    <p>完全离线运行 · 数据自主可控 · 零云端依赖</p>
+                </div>
+            </div>
+
+            <!-- 环境配置 -->
+            <div class="env-section">
+                <div class="env-title">
+                    <i class="fas fa-microchip"></i> 硬件环境配置
+                </div>
+                <div class="env-grid">
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fab fa-ubuntu"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">操作系统</div>
+                            <div class="env-value">Ubuntu 22.04 LTS</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-memory"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">系统内存</div>
+                            <div class="env-value">32GB DDR4</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-microchip"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">显存容量</div>
+                            <div class="env-value">8GB GDDR6</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-hdd"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">存储空间</div>
+                            <div class="env-value">500GB NVMe SSD</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-network-wired"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">网络环境</div>
+                            <div class="env-value">内网局域网</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">安全等级</div>
+                            <div class="env-value">涉密内网</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技术栈 -->
+            <div class="tech-stack-section">
+                <div class="section-title">
+                    <i class="fas fa-layer-group"></i> 核心技术栈
+                </div>
+                <div class="tech-cards">
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon ollama">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">Ollama</div>
+                                <div class="tech-card-subtitle">本地大模型运行平台</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-content">
+                            负责本地大语言模型的加载与推理。支持 <code>deepseek-r1:7b</code> 等模型的本地部署，提供 REST API 接口供上层应用调用。
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon llm">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">DeepSeek-R1 7B</div>
+                                <div class="tech-card-subtitle">本地推理模型</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-card-content">
+                            深度求索开源的推理模型，7B 参数版本可在 8GB 显存环境下运行。擅长逻辑推理、代码生成和文档理解。
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon embedding">
+                                <i class="fas fa-vector-square"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">nomic-embed-text</div>
+                                <div class="tech-card-subtitle">本地嵌入模型</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-content">
+                            完全开源可复现的文本嵌入模型，768 维向量输出。在 Ollama 中直接运行，无需联网即可完成文本向量化。
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon client">
+                                <i class="fas fa-laptop"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">Cherry Studio</div>
+                                <div class="tech-card-subtitle">AI 客户端</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-content">
+                            开源 AI 客户端，支持多模型管理和知识库功能。通过配置本地 Ollama 接口，实现完全离线的智能问答体验。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 部署架构 -->
+        <div class="arch-diagram">
+            <div class="section-title">
+                <i class="fas fa-project-diagram"></i> 部署架构图
+            </div>
+            <div class="arch-flow">
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-laptop"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">Cherry Studio 客户端</div>
+                        <div class="arch-desc">用户交互界面，配置本地 Ollama 接口，管理知识库和对话历史</div>
+                    </div>
+                </div>
+                <div class="arch-arrow"><i class="fas fa-arrow-down"></i></div>
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-server"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">Ollama 本地服务</div>
+                        <div class="arch-desc">运行 <code>deepseek-r1:7b</code> 大模型和 <code>nomic-embed-text</code> 嵌入模型，提供模型推理 API</div>
+                    </div>
+                </div>
+                <div class="arch-arrow"><i class="fas fa-arrow-down"></i></div>
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-database"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">本地向量存储</div>
+                        <div class="arch-desc">存储知识库文档的向量嵌入，支持语义检索和相似度匹配</div>
+                    </div>
+                </div>
+                <div class="arch-arrow"><i class="fas fa-arrow-down"></i></div>
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-folder-open"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">本地文档库</div>
+                        <div class="arch-desc">地震安评报告、合同文档等原始资料，完全离线存储</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 知识库案例 -->
+        <div class="kb-section">
+            <div class="section-title">
+                <i class="fas fa-database"></i> 知识库建设案例
+            </div>
+            <div class="kb-grid">
+                <!-- 地震安评知识库 -->
+                <div class="kb-card seismic">
+                    <div class="kb-header">
+                        <div class="kb-icon seismic"><i class="fas fa-house-damage"></i></div>
+                        <div class="kb-title">
+                            <h3>地震安评知识库</h3>
+                            <span>建设工程地震安全性评价</span>
+                        </div>
+                    </div>
+                    <div class="kb-content">
+                        <p>收集整理地震安全性评价相关的技术规范、评审标准、历史案例等资料，构建专业的地震安评知识库，支持评审人员快速检索相关技术要求和案例参考。</p>
+                        <div class="kb-data-case">
+                            <div class="kb-data-case-title"><i class="fas fa-file-alt"></i> 数据案例：康良路项目</div>
+                            <div class="kb-data-case-content">
+                                康良路（京杭大运河-运溪路）工程地震安全性评价报告，包含场地地震地质条件分析、地震动参数确定、地震地质灾害评价等章节内容。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kb-stats">
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">1</div>
+                            <div class="kb-stat-label">核心项目</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">5</div>
+                            <div class="kb-stat-label">技术规范</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">50+</div>
+                            <div class="kb-stat-label">文档片段</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 合同管理知识库 -->
+                <div class="kb-card contract">
+                    <div class="kb-header">
+                        <div class="kb-icon contract"><i class="fas fa-file-contract"></i></div>
+                        <div class="kb-title">
+                            <h3>合同管理知识库</h3>
+                            <span>项目合同文档智能管理</span>
+                        </div>
+                    </div>
+                    <div class="kb-content">
+                        <p>收录项目合同文本、补充协议、变更签证等文档，建立合同条款知识库。支持合同内容检索、条款对比分析、履约风险识别等智能应用。</p>
+                        <div class="kb-data-case">
+                            <div class="kb-data-case-title"><i class="fas fa-file-alt"></i> 数据案例：3份项目合同</div>
+                            <div class="kb-data-case-content">
+                                包含技术服务合同、设备采购合同、工程承包合同三类样本，涵盖付款条款、交付标准、违约责任、争议解决等关键条款内容。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kb-stats">
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">3</div>
+                            <div class="kb-stat-label">合同类型</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">12</div>
+                            <div class="kb-stat-label">核心条款</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">30+</div>
+                            <div class="kb-stat-label">文档片段</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作步骤 -->
+        <div class="steps-section">
+            <div class="section-title">
+                <i class="fas fa-list-ol"></i> 部署操作步骤
+            </div>
+            <div class="step-list">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">安装 Ollama</div>
+                        <div class="step-desc">在 Ubuntu 系统上安装 Ollama 本地大模型运行平台</div>
+                        <div class="step-code">
+                            <code>curl -fsSL https://ollama.com/install.sh | sh</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">下载 DeepSeek-R1 7B 模型</div>
+                        <div class="step-desc">拉取适合 8GB 显存的量化版本模型</div>
+                        <div class="step-code">
+                            <code>ollama pull deepseek-r1:7b</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">下载 Embedding 模型</div>
+                        <div class="step-desc">拉取 nomic-embed-text 用于文本向量化</div>
+                        <div class="step-code">
+                            <code>ollama pull nomic-embed-text</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">安装 Cherry Studio</div>
+                        <div class="step-desc">下载并安装 Cherry Studio 客户端，配置本地 Ollama 接口</div>
+                        <div class="step-code">
+                            <code># 下载地址：https://github.com/CherryHQ/cherry-studio/releases<br># 配置 Ollama 地址：http://localhost:11434</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-title">创建知识库</div>
+                        <div class="step-desc">在 Cherry Studio 中创建知识库，导入地震安评和合同文档</div>
+                        <div class="step-code">
+                            <code># 1. 点击"知识库" → "新建知识库"<br># 2. 选择 Embedding 模型：nomic-embed-text<br># 3. 上传文档：支持 PDF、Word、TXT 格式<br># 4. 等待向量化完成</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <div class="step-title">开始智能问答</div>
+                        <div class="step-desc">选择配置了知识库的模型，开始基于本地知识库的智能问答</div>
+                        <div class="step-code">
+                            <code># 在对话框中 @知识库 或选择知识库关联<br># 输入问题，系统将基于本地知识库返回答案</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 改进建议 -->
+        <div class="improvement-section">
+            <div class="improvement-header">
+                <div class="improvement-icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="improvement-title">
+                    待改进方向
+                    <span>基于当前部署实践的经验总结与优化建议</span>
+                </div>
+            </div>
+            <div class="improvement-grid">
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">1</div>
+                        <div class="improvement-item-title">知识矢量化能力需加强</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        当前使用的基础文本切分方式较为简单，对于复杂文档（如表格、图表混排）的处理能力不足，检索精度有待提升。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            引入 Unstructured 或 LlamaParse 进行文档智能解析，采用语义切分（Semantic Chunking）替代固定长度切分，添加文档结构元数据。
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">2</div>
+                        <div class="improvement-item-title">LLM 模型能力受限</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        7B 参数的 DeepSeek-R1 在复杂推理和长文本理解方面能力有限，且推理速度受硬件限制，难以满足高并发需求。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            升级至 32GB+ 显存设备运行 32B 或 70B 模型；或采用混合方案，本地处理敏感数据，非敏感查询调用云端 API（如 DeepSeek-V3）。
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">3</div>
+                        <div class="improvement-item-title">扩展知识材料类型</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        当前仅支持文本类文档，缺少对空间矢量数据（SHP/GDB）、项目代码库、多媒体资料的支持。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            集成 PostGIS 处理空间数据，接入 GitLab API 解析代码仓库，使用多模态模型（如 LLaVA）处理图片/视频内容。
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">4</div>
+                        <div class="improvement-item-title">增加 WebUI 团队协作</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        Cherry Studio 为单机版客户端，缺少 Web 访问能力和团队协作功能，知识库难以共享和统一管理。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            部署 Dify 或自建 Web 服务，提供浏览器访问入口；集成企业微信/飞书登录，实现团队成员权限管理和知识库共享。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
