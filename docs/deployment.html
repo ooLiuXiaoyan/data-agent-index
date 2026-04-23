@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库智能体系统 - 部署案例</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+         :root {
+            --primary-blue: #1a5fb4;
+            --dark-blue: #0d3a7a;
+            --light-blue: #e8f4fd;
+            --accent-blue: #3584e4;
+            --sky-blue: #62a0ea;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a5a5a;
+            --white: #ffffff;
+            --border-color: #d0e3f0;
+            --shadow: 0 4px 20px rgba(26, 95, 180, 0.15);
+            --shadow-hover: 0 8px 30px rgba(26, 95, 180, 0.25);
+            --radius: 12px;
+            --radius-lg: 20px;
+            --success-green: #28a745;
+            --warning-orange: #f0ad4e;
+            --danger-red: #dc3545;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        /* 导航栏 */
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--gradient-start, #1a5fb4) 0%, var(--gradient-end, #0d3a7a) 100%);
+            padding: 0 40px;
+            box-shadow: 0 4px 20px rgba(13, 58, 122, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-tab {
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary-blue);
+        }
+        
+        .main-content {
+            margin-top: 70px;
+            padding: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .page-title {
+            font-size: 38px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-title i {
+            color: var(--accent-blue);
+        }
+        
+        .page-subtitle {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        /* 案例概览卡片 */
+        
+        .case-overview {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .case-badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+        }
+        
+        .case-title-section h2 {
+            font-size: 26px;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        
+        .case-title-section p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+        /* 环境配置 */
+        
+        .env-section {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .env-title {
+            font-size: 18px;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .env-title i {
+            color: var(--accent-blue);
+        }
+        
+        .env-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .env-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .env-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .env-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .env-info {
+            flex: 1;
+        }
+        
+        .env-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+        }
+        
+        .env-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        /* 技术栈 */
+        
+        .tech-stack-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--accent-blue);
+        }
+        
+        .tech-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .tech-card {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .tech-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .tech-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .tech-card-icon.ollama {
+            background: linear-gradient(135deg, #FF6B6B, #EE5A24);
+        }
+        
+        .tech-card-icon.llm {
+            background: linear-gradient(135deg, #4ECDC4, #44A08D);
+        }
+        
+        .tech-card-icon.embedding {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .tech-card-icon.client {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .tech-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .tech-card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .tech-card-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .tech-card-content code {
+            background: #e8f4fd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--primary-blue);
+        }
+        /* 知识库案例 */
+        
+        .kb-section {
+            margin-bottom: 30px;
+        }
+        
+        .kb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+        
+        @media (max-width: 900px) {
+            .kb-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .kb-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .kb-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .kb-card.seismic {
+            border-top: 4px solid #e74c3c;
+        }
+        
+        .kb-card.contract {
+            border-top: 4px solid #27ae60;
+        }
+        
+        .kb-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .kb-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+        }
+        
+        .kb-icon.seismic {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .kb-icon.contract {
+            background: linear-gradient(135deg, #27ae60, #1e8449);
+        }
+        
+        .kb-title h3 {
+            font-size: 20px;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        
+        .kb-title span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .kb-content {
+            margin-bottom: 20px;
+        }
+        
+        .kb-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .kb-data-case {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: 10px;
+            padding: 15px;
+            border: 2px dashed var(--border-color);
+        }
+        
+        .kb-data-case-title {
+            font-size: 13px;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .kb-data-case-content {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        
+        .kb-stats {
+            display: flex;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .kb-stat {
+            text-align: center;
+        }
+        
+        .kb-stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+        
+        .kb-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        /* 改进建议 */
+        
+        .improvement-section {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            border: 2px dashed #ffb300;
+            margin-bottom: 30px;
+        }
+        
+        .improvement-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .improvement-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #ffb300, #ff8f00);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+        }
+        
+        .improvement-title {
+            font-size: 22px;
+            color: var(--dark-blue);
+        }
+        
+        .improvement-title span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: normal;
+            margin-top: 5px;
+        }
+        
+        .improvement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .improvement-item {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .improvement-item:hover {
+            border-color: #ffb300;
+            transform: translateX(5px);
+        }
+        
+        .improvement-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .improvement-item-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ffb300, #ff8f00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .improvement-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .improvement-item-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .improvement-solution {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .improvement-solution-title {
+            font-size: 12px;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .improvement-solution-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        /* 路线图 */
+        
+        .roadmap-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .roadmap-container {
+            display: flex;
+            align-items: stretch;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .roadmap-phase {
+            flex: 1;
+            min-width: 220px;
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .roadmap-phase:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .roadmap-phase.highlight {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border-color: #ffb300;
+        }
+        
+        .roadmap-phase-header {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .roadmap-phase-number {
+            display: inline-block;
+            background: var(--accent-blue);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .roadmap-phase.highlight .roadmap-phase-number {
+            background: #ff8f00;
+        }
+        
+        .roadmap-phase-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        
+        .roadmap-phase-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .roadmap-phase-content ul {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        .roadmap-phase-content li {
+            margin-bottom: 5px;
+        }
+        
+        .roadmap-tech {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-color);
+            font-size: 12px;
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+        
+        .roadmap-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-blue);
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        /* 技术选型对比 */
+        
+        .tech-compare-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .tech-compare-table-wrapper {
+            overflow-x: auto;
+        }
+        
+        .tech-compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .tech-compare-table th {
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-blue);
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .tech-compare-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+        
+        .tech-compare-table tr:hover td {
+            background: #f8fbff;
+        }
+        
+        .tech-compare-table td:first-child {
+            font-weight: 600;
+            color: var(--dark-blue);
+            white-space: nowrap;
+        }
+        
+        .tech-compare-table td:first-child i {
+            color: var(--accent-blue);
+            margin-right: 8px;
+            width: 20px;
+        }
+        
+        .tech-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .tech-tag.recommend {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            position: relative;
+            padding-right: 25px;
+        }
+        
+        .tech-tag.recommend::after {
+            content: '★';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+        }
+        /* 知识库原理图 */
+        
+        .principle-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .principle-desc {
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--accent-blue);
+        }
+        
+        .principle-desc p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .sequence-diagram-container {
+            background: #ffffff;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid var(--border-color);
+            overflow-x: auto;
+        }
+        
+        .sequence-diagram {
+            width: 100%;
+            min-width: 700px;
+            height: auto;
+            display: block;
+        }
+        
+        .principle-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .principle-step {
+            display: flex;
+            gap: 12px;
+            padding: 18px;
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .principle-step:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .principle-step .step-num {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .principle-step .step-content {
+            flex: 1;
+        }
+        
+        .principle-step .step-content strong {
+            display: block;
+            font-size: 15px;
+            color: var(--dark-blue);
+            margin-bottom: 6px;
+        }
+        
+        .principle-step .step-content span {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        /* 架构图 */
+        
+        .arch-diagram {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .arch-layer {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--border-color);
+        }
+        
+        .arch-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        
+        .arch-content {
+            flex: 1;
+        }
+        
+        .arch-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 8px;
+        }
+        
+        .arch-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .arch-arrow {
+            text-align: center;
+            color: var(--accent-blue);
+            font-size: 20px;
+        }
+        /* 操作步骤 */
+        
+        .steps-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .step-item {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fbff 0%, var(--light-blue) 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--border-color);
+        }
+        
+        .step-number {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 8px;
+        }
+        
+        .step-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+        
+        .step-code {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        
+        .step-code code {
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        /* 响应式 */
+        
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+            .page-title {
+                font-size: 28px;
+            }
+            .nav-tab span {
+                display: none;
+            }
+            .kb-grid {
+                grid-template-columns: 1fr;
+            }
+            .roadmap-container {
+                flex-direction: column;
+            }
+            .roadmap-arrow {
+                transform: rotate(90deg);
+                padding: 10px 0;
+            }
+            .tech-compare-table {
+                font-size: 12px;
+            }
+            .tech-compare-table th,
+            .tech-compare-table td {
+                padding: 10px;
+            }
+            .principle-steps {
+                grid-template-columns: 1fr;
+            }
+            .sequence-diagram-container {
+                padding: 10px;
+            }
+        }
+        
+         ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: var(--light-blue);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: var(--accent-blue);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-blue);
+        }
+        /* 升级亮点 */
+        
+        .upgrade-section {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4e9f9 100%);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        .upgrade-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .upgrade-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+        }
+        
+        .upgrade-title {
+            font-size: 22px;
+            color: var(--dark-blue);
+        }
+        
+        .upgrade-title span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: normal;
+            margin-top: 5px;
+        }
+        
+        .upgrade-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .upgrade-item {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .upgrade-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .upgrade-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .upgrade-item-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .upgrade-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .upgrade-item-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .upgrade-compare {
+            margin-top: 12px;
+            padding: 10px;
+            background: #f8fbff;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .upgrade-compare strong {
+            color: var(--accent-blue);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-robot"></i>
+            <span>知识库智能体</span>
+        </div>
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab">
+                <i class="fas fa-sitemap"></i>
+                <span>技术路线</span>
+            </a>
+            <a href="deployment.html" class="nav-tab active">
+                <i class="fas fa-server"></i>
+                <span>部署案例</span>
+            </a>
+            <a href="demo.html" class="nav-tab">
+                <i class="fas fa-rocket"></i>
+                <span>Demo</span>
+            </a>
+            <a href="haina-thinking.html" class="nav-tab">
+                <i class="fas fa-lightbulb"></i>
+                <span>海纳设想</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-server"></i> 私有化部署实战案例
+            </h1>
+            <p class="page-subtitle">
+                基于 Ollama + DeepSeek + Nomic-Embed + Dify 的本地知识库建设方案
+            </p>
+        </div>
+
+        <!-- 案例概览 -->
+        <div class="case-overview">
+            <div class="case-header">
+                <div class="case-badge">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="case-title-section">
+                    <h2>本地私有化部署方案</h2>
+                    <p>完全离线运行 · 数据自主可控 · 零云端依赖</p>
+                </div>
+            </div>
+
+            <!-- 环境配置 -->
+            <div class="env-section">
+                <div class="env-title">
+                    <i class="fas fa-microchip"></i> 硬件环境配置
+                </div>
+                <div class="env-grid">
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fab fa-ubuntu"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">操作系统</div>
+                            <div class="env-value">Ubuntu 22.04 LTS</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-memory"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">系统内存</div>
+                            <div class="env-value">32GB DDR4</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-microchip"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">显存容量</div>
+                            <div class="env-value">8GB GDDR6</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-hdd"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">存储空间</div>
+                            <div class="env-value">500GB NVMe SSD</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-network-wired"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">网络环境</div>
+                            <div class="env-value">内网局域网</div>
+                        </div>
+                    </div>
+                    <div class="env-item">
+                        <div class="env-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="env-info">
+                            <div class="env-label">安全等级</div>
+                            <div class="env-value">涉密内网</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技术栈 -->
+            <div class="tech-stack-section">
+                <div class="section-title">
+                    <i class="fas fa-layer-group"></i> 核心技术栈
+                </div>
+                <div class="tech-cards">
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon ollama">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">Ollama</div>
+                                <div class="tech-card-subtitle">本地大模型运行平台</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-content">
+                            负责本地大语言模型的加载与推理。支持 <code>deepseek-r1:7b</code> 等模型的本地部署，提供 REST API 接口供上层应用调用。
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon llm">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">DeepSeek-R1 7B</div>
+                                <div class="tech-card-subtitle">本地推理模型</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-card-content">
+                            深度求索开源的推理模型，7B 参数版本可在 8GB 显存环境下运行。擅长逻辑推理、代码生成和文档理解。
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon embedding">
+                                <i class="fas fa-vector-square"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">nomic-embed-text</div>
+                                <div class="tech-card-subtitle">本地嵌入模型</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-content">
+                            完全开源可复现的文本嵌入模型，768 维向量输出。在 Ollama 中直接运行，无需联网即可完成文本向量化。
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-card-header">
+                            <div class="tech-card-icon client">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <div>
+                                <div class="tech-card-title">Dify</div>
+                                <div class="tech-card-subtitle">LLM 应用开发平台</div>
+                            </div>
+                        </div>
+                        <div class="tech-card-content">
+                            开源 LLM 应用开发平台，支持通过 Docker 一键部署。内置知识库（RAG）、Agent、工作流编排能力，可对接 Ollama 本地模型，提供 Web 访问入口与团队协作功能。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 升级亮点 -->
+        <div class="upgrade-section">
+            <div class="upgrade-header">
+                <div class="upgrade-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="upgrade-title">
+                    升级亮点：Cherry Studio → Dify
+                    <span>从单机客户端到企业级 LLM 应用平台的跨越</span>
+                </div>
+            </div>
+            <div class="upgrade-grid">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-globe"></i></div>
+                        <div class="upgrade-item-title">Web 化访问</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        无需安装桌面客户端，浏览器即开即用。支持内网部署，团队成员通过统一 URL 访问，大幅降低推广和运维成本。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>每人需下载安装 Cherry Studio 客户端，仅支持单机使用
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-users"></i></div>
+                        <div class="upgrade-item-title">团队协作</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        支持多用户注册、知识库共享、权限分级管理。管理员可控制谁能查看、编辑或发布知识库内容。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>知识库分散在个人电脑，无法共享和统一管理
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-project-diagram"></i></div>
+                        <div class="upgrade-item-title">工作流编排</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        可视化拖拽构建复杂 AI 工作流，支持条件分支、变量传递、多模型串联。将重复性业务逻辑自动化。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>仅支持单轮对话，无法处理多步骤复杂业务流程
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-robot"></i></div>
+                        <div class="upgrade-item-title">Agent 智能体</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        内置 ReAct / Function Calling 智能体框架，可调用外部工具（如数据库查询、GIS 分析），实现自主任务执行。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>无工具调用能力，模型仅能基于已有知识回答问题
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-code"></i></div>
+                        <div class="upgrade-item-title">API 发布</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        一键将知识库应用发布为标准 REST API，方便对接现有业务系统（如 OA、GIS 平台、微信小程序）。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>仅能在客户端内使用，无法嵌入第三方系统
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-database"></i></div>
+                        <div class="upgrade-item-title">专业 RAG 能力</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        支持自动/自定义分段、引用溯源、重排序（Rerank）、多知识库联合检索，大幅提升问答准确率。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>基础文本切分，无引用溯源和高级检索策略
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 部署架构 -->
+        <div class="arch-diagram">
+            <div class="section-title">
+                <i class="fas fa-project-diagram"></i> 部署架构图
+            </div>
+            <div class="arch-flow">
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-laptop"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">Dify 平台</div>
+                        <div class="arch-desc">通过 Docker 部署的 Web 应用平台，配置 Ollama 模型提供商，管理知识库、Agent 和工作流</div>
+                    </div>
+                </div>
+                <div class="arch-arrow"><i class="fas fa-arrow-down"></i></div>
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-server"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">Ollama 本地服务</div>
+                        <div class="arch-desc">运行 <code>deepseek-r1:7b</code> 大模型和 <code>nomic-embed-text</code> 嵌入模型，提供模型推理 API</div>
+                    </div>
+                </div>
+                <div class="arch-arrow"><i class="fas fa-arrow-down"></i></div>
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-database"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">本地向量存储</div>
+                        <div class="arch-desc">存储知识库文档的向量嵌入，支持语义检索和相似度匹配</div>
+                    </div>
+                </div>
+                <div class="arch-arrow"><i class="fas fa-arrow-down"></i></div>
+                <div class="arch-layer">
+                    <div class="arch-icon"><i class="fas fa-folder-open"></i></div>
+                    <div class="arch-content">
+                        <div class="arch-title">本地文档库</div>
+                        <div class="arch-desc">地震安评报告、合同文档等原始资料，完全离线存储</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 知识库原理解析 -->
+        <div class="principle-section">
+            <div class="section-title">
+                <i class="fas fa-cogs"></i> 知识库原理解析（RAG流程）
+            </div>
+            <div class="principle-desc">
+                <p>基于 Dify 知识库（RAG）的工作流程。系统通过向量检索将用户问题与知识库文档片段关联，再由大模型生成精准答案。</p>
+            </div>
+            <div class="sequence-diagram-container">
+                <svg viewBox="0 0 900 520" class="sequence-diagram">
+                    <!-- 背景 -->
+                    <rect x="0" y="0" width="900" height="520" fill="#fafbfc" rx="8"/>
+                    
+                    <!-- 标题 -->
+                    <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a5fb4">知识库检索增强生成（RAG）流程图</text>
+                    
+                    <!-- 角色框 - 顶部 -->
+                    <rect x="30" y="50" width="120" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="90" y="75" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a5fb4">User</text>
+                    
+                    <rect x="210" y="50" width="120" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="270" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a5fb4">Application</text>
+                    
+                    <rect x="390" y="50" width="140" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="460" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a5fb4">EmbeddingModel</text>
+                    
+                    <rect x="590" y="50" width="120" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="650" y="75" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a5fb4">VectorDB</text>
+                    
+                    <rect x="770" y="50" width="100" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="820" y="75" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a5fb4">LLM</text>
+                    
+                    <!-- 生命线 -->
+                    <line x1="90" y1="90" x2="90" y2="450" stroke="#d0e3f0" stroke-width="2"/>
+                    <line x1="270" y1="90" x2="270" y2="450" stroke="#d0e3f0" stroke-width="2"/>
+                    <line x1="460" y1="90" x2="460" y2="450" stroke="#d0e3f0" stroke-width="2"/>
+                    <line x1="650" y1="90" x2="650" y2="450" stroke="#d0e3f0" stroke-width="2"/>
+                    <line x1="820" y1="90" x2="820" y2="450" stroke="#d0e3f0" stroke-width="2"/>
+                    
+                    <!-- 角色框 - 底部 -->
+                    <rect x="30" y="450" width="120" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="90" y="475" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a5fb4">User</text>
+                    
+                    <rect x="210" y="450" width="120" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="270" y="475" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a5fb4">Application</text>
+                    
+                    <rect x="390" y="450" width="140" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="460" y="475" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a5fb4">EmbeddingModel</text>
+                    
+                    <rect x="590" y="450" width="120" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="650" y="475" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a5fb4">VectorDB</text>
+                    
+                    <rect x="770" y="450" width="100" height="40" fill="#e8f4fd" stroke="#1a5fb4" stroke-width="2" rx="6"/>
+                    <text x="820" y="475" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a5fb4">LLM</text>
+                    
+                    <!-- 消息 1: User -> Application -->
+                    <line x1="90" y1="115" x2="270" y2="115" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <text x="180" y="108" text-anchor="middle" font-size="12" fill="#333">提出问题</text>
+                    
+                    <!-- 消息 2: Application -> EmbeddingModel -->
+                    <line x1="270" y1="145" x2="460" y2="145" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <text x="365" y="138" text-anchor="middle" font-size="12" fill="#333">将问题转换为向量</text>
+                    
+                    <!-- 消息 3: EmbeddingModel -> Application (返回) -->
+                    <line x1="460" y1="175" x2="270" y2="175" stroke="#666" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+                    <text x="365" y="168" text-anchor="middle" font-size="12" fill="#666">返回问题向量</text>
+                    
+                    <!-- 消息 4: Application -> VectorDB -->
+                    <line x1="270" y1="205" x2="650" y2="205" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <text x="460" y="198" text-anchor="middle" font-size="12" fill="#333">使用问题向量进行相似度搜索</text>
+                    
+                    <!-- 消息 5: VectorDB -> Application (返回) -->
+                    <line x1="650" y1="235" x2="270" y2="235" stroke="#666" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+                    <text x="460" y="228" text-anchor="middle" font-size="12" fill="#666">返回最相关的文档片段</text>
+                    
+                    <!-- 自循环: Application -->
+                    <path d="M 270,250 Q 220,265 270,280" fill="none" stroke="#1a5fb4" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <text x="200" y="268" text-anchor="middle" font-size="12" fill="#1a5fb4">组织提示词</text>
+                    <text x="200" y="282" text-anchor="middle" font-size="11" fill="#666">(问题+文档片段)</text>
+                    
+                    <!-- 消息 6: Application -> LLM -->
+                    <line x1="270" y1="310" x2="820" y2="310" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+                    <text x="545" y="303" text-anchor="middle" font-size="12" fill="#333">发送提示词</text>
+                    
+                    <!-- 消息 7: LLM -> Application (返回) -->
+                    <line x1="820" y1="340" x2="270" y2="340" stroke="#666" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+                    <text x="545" y="333" text-anchor="middle" font-size="12" fill="#666">生成答案</text>
+                    
+                    <!-- 消息 8: Application -> User (返回) -->
+                    <line x1="270" y1="370" x2="90" y2="370" stroke="#666" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowhead)"/>
+                    <text x="180" y="363" text-anchor="middle" font-size="12" fill="#666">返回答案</text>
+                    
+                    <!-- 箭头定义 -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- 流程标注 -->
+                    <rect x="30" y="395" width="840" height="45" fill="#fff8e1" stroke="#ffb300" stroke-width="1" rx="6"/>
+                    <text x="450" y="418" text-anchor="middle" font-size="12" fill="#666">
+                        <tspan font-weight="bold" fill="#1a5fb4">检索阶段</tspan>（步骤1-5）：问题向量化 → 相似度搜索 → 获取相关文档
+                    </text>
+                    <text x="450" y="435" text-anchor="middle" font-size="12" fill="#666">
+                        <tspan font-weight="bold" fill="#27ae60">生成阶段</tspan>（步骤6-8）：组织Prompt → LLM推理 → 返回答案
+                    </text>
+                </svg>
+            </div>
+            <div class="principle-steps">
+                <div class="principle-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <strong>问题向量化</strong>
+                        <span>用户使用自然语言提问，Application 调用 EmbeddingModel 将问题转换为高维向量（768维）</span>
+                    </div>
+                </div>
+                <div class="principle-step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <strong>向量相似度检索</strong>
+                        <span>在 VectorDB 中使用余弦相似度计算，检索与问题向量最接近的 Top-K 个文档片段</span>
+                    </div>
+                </div>
+                <div class="principle-step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <strong>上下文构建</strong>
+                        <span>将检索到的文档片段与原始问题组合，构建包含上下文的 Prompt（通常遵循特定模板）</span>
+                    </div>
+                </div>
+                <div class="principle-step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <strong>大模型生成</strong>
+                        <span>LLM 基于提供的上下文生成答案，确保回答内容基于知识库而非模型预训练知识</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 知识库案例 -->
+        <div class="kb-section">
+            <div class="section-title">
+                <i class="fas fa-database"></i> 知识库建设案例
+            </div>
+            <div class="kb-grid">
+                <!-- 地震安评知识库 -->
+                <div class="kb-card seismic">
+                    <div class="kb-header">
+                        <div class="kb-icon seismic"><i class="fas fa-house-damage"></i></div>
+                        <div class="kb-title">
+                            <h3>地震安评知识库</h3>
+                            <span>建设工程地震安全性评价</span>
+                        </div>
+                    </div>
+                    <div class="kb-content">
+                        <p>收集整理地震安全性评价相关的技术规范、评审标准、历史案例等资料，构建专业的地震安评知识库，支持评审人员快速检索相关技术要求和案例参考。</p>
+                        <div class="kb-data-case">
+                            <div class="kb-data-case-title"><i class="fas fa-file-alt"></i> 数据案例：康良路项目</div>
+                            <div class="kb-data-case-content">
+                                康良路（京杭大运河-运溪路）工程地震安全性评价报告，包含场地地震地质条件分析、地震动参数确定、地震地质灾害评价等章节内容。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kb-stats">
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">1</div>
+                            <div class="kb-stat-label">核心项目</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">5</div>
+                            <div class="kb-stat-label">技术规范</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">50+</div>
+                            <div class="kb-stat-label">文档片段</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 合同管理知识库 -->
+                <div class="kb-card contract">
+                    <div class="kb-header">
+                        <div class="kb-icon contract"><i class="fas fa-file-contract"></i></div>
+                        <div class="kb-title">
+                            <h3>合同管理知识库</h3>
+                            <span>项目合同文档智能管理</span>
+                        </div>
+                    </div>
+                    <div class="kb-content">
+                        <p>收录项目合同文本、补充协议、变更签证等文档，建立合同条款知识库。支持合同内容检索、条款对比分析、履约风险识别等智能应用。</p>
+                        <div class="kb-data-case">
+                            <div class="kb-data-case-title"><i class="fas fa-file-alt"></i> 数据案例：3份项目合同</div>
+                            <div class="kb-data-case-content">
+                                包含技术服务合同、设备采购合同、工程承包合同三类样本，涵盖付款条款、交付标准、违约责任、争议解决等关键条款内容。
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kb-stats">
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">3</div>
+                            <div class="kb-stat-label">合同类型</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">12</div>
+                            <div class="kb-stat-label">核心条款</div>
+                        </div>
+                        <div class="kb-stat">
+                            <div class="kb-stat-value">30+</div>
+                            <div class="kb-stat-label">文档片段</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作步骤 -->
+        <div class="steps-section">
+            <div class="section-title">
+                <i class="fas fa-list-ol"></i> 部署操作步骤
+            </div>
+            <div class="step-list">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">安装 Ollama</div>
+                        <div class="step-desc">在 Ubuntu 系统上安装 Ollama 本地大模型运行平台</div>
+                        <div class="step-code">
+                            <code>curl -fsSL https://ollama.com/install.sh | sh</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">下载 DeepSeek-R1 7B 模型</div>
+                        <div class="step-desc">拉取适合 8GB 显存的量化版本模型</div>
+                        <div class="step-code">
+                            <code>ollama pull deepseek-r1:7b</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">下载 Embedding 模型</div>
+                        <div class="step-desc">拉取 nomic-embed-text 用于文本向量化</div>
+                        <div class="step-code">
+                            <code>ollama pull nomic-embed-text</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">部署 Dify 平台</div>
+                        <div class="step-desc">通过 Docker Compose 一键部署 Dify，配置本地 Ollama 模型提供商</div>
+                        <div class="step-code">
+                            <code># 克隆 Dify 代码仓库<br>git clone https://github.com/langgenius/dify.git<br>cd dify/docker<br>cp .env.example .env<br># 启动服务<br>docker compose up -d<br># 访问地址：http://localhost/install<br># 配置 Ollama 模型：设置 → 模型供应商 → Ollama → 填写 http://host.docker.internal:11434</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <div class="step-title">创建知识库</div>
+                        <div class="step-desc">在 Dify 中创建知识库，导入地震安评和合同文档</div>
+                        <div class="step-code">
+                            <code># 1. 进入"知识库" → "创建知识库"<br># 2. 选择索引方式：高质量模式（调用 nomic-embed-text）<br># 3. 上传文档：支持 PDF、Word、TXT 等格式<br># 4. 配置分段规则：自动分段 / 自定义分段标识<br># 5. 等待向量化处理完成</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <div class="step-title">开始智能问答</div>
+                        <div class="step-desc">选择配置了知识库的模型，开始基于本地知识库的智能问答</div>
+                        <div class="step-code">
+                            <code># 在对话框中 @知识库 或选择知识库关联<br># 输入问题，系统将基于本地知识库返回答案</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 改进建议 -->
+        <div class="improvement-section">
+            <div class="improvement-header">
+                <div class="improvement-icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="improvement-title">
+                    待改进方向
+                    <span>基于当前部署实践的经验总结与优化建议（含GIS空间能力升级）</span>
+                </div>
+            </div>
+            <div class="improvement-grid">
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">1</div>
+                        <div class="improvement-item-title">知识矢量化能力需加强</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        当前使用的基础文本切分方式较为简单，对于复杂文档（如表格、图表混排）的处理能力不足，检索精度有待提升。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            引入 Unstructured 或 LlamaParse 进行文档智能解析，采用语义切分（Semantic Chunking）替代固定长度切分，添加文档结构元数据。
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">2</div>
+                        <div class="improvement-item-title">LLM 模型能力受限</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        7B 参数的 DeepSeek-R1 在复杂推理和长文本理解方面能力有限，且推理速度受硬件限制，难以满足高并发需求。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            升级至 32GB+ 显存设备运行 32B 或 70B 模型；或采用混合方案，本地处理敏感数据，非敏感查询调用云端 API（如 DeepSeek-V3）。
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">3</div>
+                        <div class="improvement-item-title">GIS空间数据向量化与检索 ⭐核心</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        当前GIS数据（GeoJSON/SHP/GDB）仅以原始文件存储，未进入向量索引，无法实现"某坐标附近的水利设施"等空间语义查询。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议（2024-2025技术趋势）</div>
+                        <div class="improvement-solution-content">
+                            <b>① 双向量表示：</b>将GIS要素转为"文本描述向量(768维)+空间坐标向量(2D)"，存入ChromaDB多集合<br>
+                            <b>② 空间索引：</b>采用H3六边形网格或Geohash建立空间索引，支持快速范围查询<br>
+                            <b>③ 混合检索：</b>文本语义检索+空间最近邻检索融合（RRF排序），实现自然语言地理查询
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">4</div>
+                        <div class="improvement-item-title">空间分析与GeoAI推理能力 ⭐核心</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        缺乏空间关系推理能力，无法回答"哪条河流流经的堤坝最多"、"缓冲区内的地震风险点"等空间分析问题。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议（2024-2025技术趋势）</div>
+                        <div class="improvement-solution-content">
+                            <b>① Spatial RAG架构：</b>集成GeoPandas/Shapely处理空间关系，LLM生成空间分析代码并执行<br>
+                            <b>② GeoLLM集成：</b>使用支持地理推理的模型（如GPT-4o/Claude-3.5-Sonnet或开源K2-GeoLLM）<br>
+                            <b>③ Function Calling：</b>定义空间查询工具（spatial_search/buffer_analysis/intersect_query）供模型调用
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">5</div>
+                        <div class="improvement-item-title">地图可视化与交互查询 ⭐核心</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        当前纯文本交互无法直观展示空间查询结果，缺少地图选点、画框查询、半径检索等GIS标准交互能力。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议（2024-2025技术趋势）</div>
+                        <div class="improvement-solution-content">
+                            <b>① 前端地图引擎：</b>集成MapLibre GL（开源无token）或Leaflet，叠加天地图/OSM底图<br>
+                            <b>② 交互查询组件：</b>支持画框查询(BBOX)、圆形缓冲区(Circle Buffer)、多边形选择<br>
+                            <b>③ 结果可视化：</b>GeoJSON渲染+热力图+聚类，支持点击要素查看AI生成的属性摘要
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">6</div>
+                        <div class="improvement-item-title">多源异构数据融合</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        文档知识（PDF）、空间数据（GIS）、结构化数据（数据库）各自独立，无法联合回答"某项目所在区域的地震安评要求"。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            <b>① 统一知识图谱：</b>构建GeoKnowledgeEntity统一实体模型，关联文档条款与空间要素<br>
+                            <b>② PostGIS+pgvector：</b>使用PostgreSQL同时存储空间几何和向量嵌入，SQL统一查询<br>
+                            <b>③ 跨源RAG：</b>单次查询同时检索文档、GIS特征、数据库记录，融合生成综合答案
+                        </div>
+                    </div>
+                </div>
+                <div class="improvement-item">
+                    <div class="improvement-item-header">
+                        <div class="improvement-item-number">7</div>
+                        <div class="improvement-item-title">增加 WebUI 团队协作</div>
+                    </div>
+                    <div class="improvement-item-content">
+                        虽然 Dify 已提供 Web 访问与基础团队协作能力，但在大规模企业场景下，仍可进一步集成 SSO 单点登录、精细化权限管控及审计日志等功能。
+                    </div>
+                    <div class="improvement-solution">
+                        <div class="improvement-solution-title">💡 优化建议</div>
+                        <div class="improvement-solution-content">
+                            配置企业微信/钉钉/飞书 SSO 登录；开启操作审计日志；按部门/项目划分知识库可见范围，实现企业级权限管控。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 技术演进路线图 -->
+        <div class="roadmap-section">
+            <div class="section-title">
+                <i class="fas fa-road"></i> 空间智能升级路线图
+            </div>
+            <div class="roadmap-container">
+                <div class="roadmap-phase">
+                    <div class="roadmap-phase-header">
+                        <div class="roadmap-phase-number">Phase 1</div>
+                        <div class="roadmap-phase-title">基础GIS向量化</div>
+                        <div class="roadmap-phase-time">2-3周</div>
+                    </div>
+                    <div class="roadmap-phase-content">
+                        <ul>
+                            <li>GeoJSON/SHP自动向量化管道</li>
+                            <li>ChromaDB多集合结构扩展</li>
+                            <li>地理实体识别模块（NER）</li>
+                            <li>基础空间属性联合查询</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-tech">技术栈：GeoPandas + SentenceTransformer + ChromaDB</div>
+                </div>
+                <div class="roadmap-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="roadmap-phase">
+                    <div class="roadmap-phase-header">
+                        <div class="roadmap-phase-number">Phase 2</div>
+                        <div class="roadmap-phase-title">空间索引与可视化</div>
+                        <div class="roadmap-phase-time">2-3周</div>
+                    </div>
+                    <div class="roadmap-phase-content">
+                        <ul>
+                            <li>H3/Geohash空间索引集成</li>
+                            <li>范围查询API（半径/矩形/多边形）</li>
+                            <li>空间-语义融合排序（RRF）</li>
+                            <li>MapLibre GL地图可视化</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-tech">技术栈：H3-py + MapLibre GL + PostGIS</div>
+                </div>
+                <div class="roadmap-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="roadmap-phase">
+                    <div class="roadmap-phase-header">
+                        <div class="roadmap-phase-number">Phase 3</div>
+                        <div class="roadmap-phase-title">GeoAI推理能力</div>
+                        <div class="roadmap-phase-time">3-4周</div>
+                    </div>
+                    <div class="roadmap-phase-content">
+                        <ul>
+                            <li>GeoLLM集成（GPT-4o/Claude）</li>
+                            <li>Function Calling空间工具链</li>
+                            <li>自然语言地理查询解析</li>
+                            <li>空间分析（缓冲区/叠加/网络）</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-tech">技术栈：LangChain + Shapely + GeoLLM API</div>
+                </div>
+                <div class="roadmap-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="roadmap-phase highlight">
+                    <div class="roadmap-phase-header">
+                        <div class="roadmap-phase-number">Phase 4</div>
+                        <div class="roadmap-phase-title">空间智能体</div>
+                        <div class="roadmap-phase-time">4-6周</div>
+                    </div>
+                    <div class="roadmap-phase-content">
+                        <ul>
+                            <li>知识图谱（实体关系抽取）</li>
+                            <li>时序GIS数据支持</li>
+                            <li>多模态查询（文本+地图+语音）</li>
+                            <li>自主空间决策Agent</li>
+                        </ul>
+                    </div>
+                    <div class="roadmap-tech">技术栈：Neo4j + TimescaleDB + Multi-Agent</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心技术选型对比 -->
+        <div class="tech-compare-section">
+            <div class="section-title">
+                <i class="fas fa-balance-scale"></i> 空间技术选型对比（2024-2025）
+            </div>
+            <div class="tech-compare-table-wrapper">
+                <table class="tech-compare-table">
+                    <thead>
+                        <tr>
+                            <th>技术领域</th>
+                            <th>方案A（推荐）</th>
+                            <th>方案B（替代）</th>
+                            <th>选择理由</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fas fa-vector-square"></i> 向量数据库</td>
+                            <td><span class="tech-tag recommend">ChromaDB升级</span></td>
+                            <td><span class="tech-tag">Milvus / PGVector</span></td>
+                            <td>保持现有架构，支持多集合，升级成本低</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-map-marked-alt"></i> 空间数据库</td>
+                            <td><span class="tech-tag recommend">PostGIS + pgvector</span></td>
+                            <td><span class="tech-tag">GeoMesa / HBase</span></td>
+                            <td>成熟稳定，SQL生态完善，同时支持空间+向量</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-globe"></i> 空间索引</td>
+                            <td><span class="tech-tag recommend">H3六边形网格</span></td>
+                            <td><span class="tech-tag">Geohash / S2</span></td>
+                            <td>Uber开源，精度分级清晰，聚合分析友好</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-map"></i> 地图引擎</td>
+                            <td><span class="tech-tag recommend">MapLibre GL</span></td>
+                            <td><span class="tech-tag">Leaflet / Cesium</span></td>
+                            <td>开源无token限制，矢量渲染性能优异</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-brain"></i> GeoAI模型</td>
+                            <td><span class="tech-tag recommend">GPT-4o / Claude-3.5</span></td>
+                            <td><span class="tech-tag">K2-GeoLLM / 自研LoRA</span></td>
+                            <td>地理推理能力强，API稳定，无需训练成本</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-code-branch"></i> 空间计算</td>
+                            <td><span class="tech-tag recommend">GeoPandas + Shapely</span></td>
+                            <td><span class="tech-tag">ArcPy / GDAL</span></td>
+                            <td>Python原生，与AI生态无缝集成</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

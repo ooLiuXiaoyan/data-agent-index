@@ -1,0 +1,3019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库智能体系统 - 技术路线</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+         :root {
+            --primary-blue: #1a5fb4;
+            --dark-blue: #0d3a7a;
+            --light-blue: #e8f4fd;
+            --accent-blue: #3584e4;
+            --sky-blue: #62a0ea;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a5a5a;
+            --white: #ffffff;
+            --border-color: #d0e3f0;
+            --shadow: 0 4px 20px rgba(26, 95, 180, 0.15);
+            --shadow-hover: 0 8px 30px rgba(26, 95, 180, 0.25);
+            --radius: 12px;
+            --radius-lg: 20px;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        /* 导航栏 */
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--gradient-start, #1a5fb4) 0%, var(--gradient-end, #0d3a7a) 100%);
+            padding: 0 40px;
+            box-shadow: 0 4px 20px rgba(13, 58, 122, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-tab {
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary-blue);
+        }
+        /* 主内容区 */
+        
+        .main-content {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+        
+        .page-section {
+            padding: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* 页面标题 */
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px 0;
+        }
+        
+        .page-title {
+            font-size: 42px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-title i {
+            color: var(--accent-blue);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .page-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        /* 分隔线装饰 */
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            gap: 15px;
+        }
+        
+        .divider-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            max-width: 200px;
+        }
+        
+        .divider-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: var(--shadow);
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* 技术架构图 */
+        
+        .architecture-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 50px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+        
+        .arch-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .arch-layer {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            border-radius: var(--radius);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .arch-layer:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow);
+            border-color: var(--accent-blue);
+        }
+        
+        .layer-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(26, 95, 180, 0.3);
+        }
+        
+        .layer-content {
+            flex: 1;
+        }
+        
+        .layer-title {
+            font-size: 22px;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .layer-desc {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        /* 技术选型标签 */
+        
+        .layer-technologies {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .tech-category {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tech-category-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            min-width: 70px;
+        }
+        
+        .tech-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+        
+        .tech-tag {
+            padding: 6px 14px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-tag:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(53, 132, 228, 0.3);
+        }
+        
+        .tech-tag i {
+            font-size: 14px;
+        }
+        
+        .tech-tag.popular {
+            border-color: var(--accent-blue);
+            background: linear-gradient(135deg, #e8f4fd, #fff);
+        }
+        
+        .tech-tag.recommended {
+            border-color: #28a745;
+            position: relative;
+        }
+        
+        .tech-tag.recommended::after {
+            content: '荐';
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            background: #28a745;
+            color: white;
+            font-size: 9px;
+            padding: 1px 4px;
+            border-radius: 4px;
+        }
+        
+        .arrow-down {
+            text-align: center;
+            color: var(--accent-blue);
+            font-size: 24px;
+            animation: bounce 2s infinite;
+        }
+        /* 数据类型展示 */
+        
+        .data-types-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 28px;
+            color: var(--dark-blue);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: var(--accent-blue);
+        }
+        
+        .data-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .data-type-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-blue), var(--primary-blue));
+        }
+        
+        .data-type-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-color);
+        }
+        
+        .data-type-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .data-type-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: white;
+        }
+        
+        .icon-document {
+            background: linear-gradient(135deg, #4a90d9, #1a5fb4);
+        }
+        
+        .icon-code {
+            background: linear-gradient(135deg, #5cb85c, #2e7d32);
+        }
+        
+        .icon-gis {
+            background: linear-gradient(135deg, #f0ad4e, #d58512);
+        }
+        
+        .icon-database {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .data-type-title {
+            font-size: 20px;
+            color: var(--dark-blue);
+        }
+        
+        .data-type-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .file-formats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .format-badge {
+            padding: 6px 14px;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        /* 右侧抽屉 */
+        
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -550px;
+            width: 550px;
+            height: 100%;
+            background: var(--white);
+            z-index: 2001;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .drawer.active {
+            right: 0;
+        }
+        
+        .drawer-header {
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .drawer-title {
+            font-size: 22px;
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .drawer-title i {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .drawer-close {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .drawer-close:hover {
+            background: var(--accent-blue);
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+        
+        .drawer-section {
+            margin-bottom: 25px;
+        }
+        
+        .drawer-section-title {
+            font-size: 16px;
+            color: var(--dark-blue);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        
+        .drawer-section-title i {
+            color: var(--accent-blue);
+        }
+        
+        .drawer-content {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        .drawer-content p {
+            margin-bottom: 10px;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .pros-cons-box {
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .pros-box {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .cons-box {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .pros-cons-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        
+        .pros-box .pros-cons-title {
+            color: #155724;
+        }
+        
+        .cons-box .pros-cons-title {
+            color: #721c24;
+        }
+        
+        .pros-cons-list {
+            margin: 0;
+            padding-left: 16px;
+            font-size: 13px;
+        }
+        
+        .pros-cons-list li {
+            margin-bottom: 4px;
+        }
+        
+        .code-block {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list li i {
+            color: var(--accent-blue);
+            margin-top: 3px;
+        }
+        
+        .case-card {
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f8fbff 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .case-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(5px);
+        }
+        
+        .case-title {
+            font-size: 15px;
+            color: var(--dark-blue);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .case-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .tag {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--primary-blue);
+        }
+        /* 部署方案 */
+        
+        .deployment-section {
+            margin-top: 50px;
+            margin-bottom: 40px;
+        }
+        
+        .deployment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .deployment-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .deployment-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 35px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .deployment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .deployment-card.cloud {
+            border-color: #e3f2fd;
+        }
+        
+        .deployment-card.cloud::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #42a5f5, #1976d2);
+        }
+        
+        .deployment-card.local {
+            border-color: #e8f5e9;
+        }
+        
+        .deployment-card.local::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #66bb6a, #388e3c);
+        }
+        
+        .deployment-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .deployment-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .deployment-card.cloud .deployment-icon {
+            background: linear-gradient(135deg, #42a5f5, #1976d2);
+        }
+        
+        .deployment-card.local .deployment-icon {
+            background: linear-gradient(135deg, #66bb6a, #388e3c);
+        }
+        
+        .deployment-title {
+            font-size: 24px;
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+        
+        .deployment-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        
+        .deployment-content {
+            margin-top: 20px;
+        }
+        
+        .deployment-section-title {
+            font-size: 16px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        
+        .deployment-section-title i {
+            color: var(--accent-blue);
+        }
+        
+        .tech-stack-list {
+            margin-bottom: 25px;
+        }
+        
+        .tech-stack-category {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--light-blue);
+            border-radius: 10px;
+        }
+        
+        .tech-stack-category-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .tech-stack-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tech-stack-item {
+            padding: 6px 12px;
+            background: white;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .tech-stack-item i {
+            font-size: 12px;
+        }
+        
+        .scenario-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .scenario-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .scenario-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .scenario-list li i {
+            color: var(--accent-blue);
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        
+        .scenario-list li strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .pros-cons-horizontal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .pros-cons-mini {
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+        
+        .pros-mini {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .cons-mini {
+            background: #ffebee;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .pros-cons-mini-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .pros-mini .pros-cons-mini-title {
+            color: #2e7d32;
+        }
+        
+        .cons-mini .pros-cons-mini-title {
+            color: #c62828;
+        }
+        
+        .pros-cons-mini ul {
+            margin: 0;
+            padding-left: 16px;
+            color: var(--text-secondary);
+        }
+        
+        .pros-cons-mini li {
+            margin-bottom: 4px;
+        }
+        
+        .recommendation-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .recommendation-badge.cloud {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .recommendation-badge.local {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+        /* 特性展示 */
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-blue);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--light-blue) 0%, #f0f7ff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: var(--accent-blue);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            color: white;
+            transform: rotateY(360deg);
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+        
+        .feature-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        @media (max-width: 768px) {
+            .drawer {
+                width: 100%;
+                right: -100%;
+            }
+            .page-title {
+                font-size: 28px;
+            }
+            .architecture-container {
+                padding: 25px;
+            }
+            .tech-tags {
+                gap: 6px;
+            }
+            .tech-tag {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+        }
+        
+         ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: var(--light-blue);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: var(--accent-blue);
+            border-radius: 4px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-blue);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-robot"></i>
+            <span>知识库智能体</span>
+        </div>
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab active">
+                <i class="fas fa-sitemap"></i>
+                <span>技术路线</span>
+            </a>
+            <a href="deployment.html" class="nav-tab">
+                <i class="fas fa-server"></i>
+                <span>部署案例</span>
+            </a>
+            <a href="demo.html" class="nav-tab">
+                <i class="fas fa-rocket"></i>
+                <span>Demo</span>
+            </a>
+            <a href="haina-thinking.html" class="nav-tab">
+                <i class="fas fa-lightbulb"></i>
+                <span>海纳设想</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <section class="page-section">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-project-diagram"></i> 知识库智能体技术架构
+                </h1>
+                <p class="page-subtitle">
+                    基于多模态数据处理、RAG检索增强生成、Agent智能体的企业级知识管理解决方案
+                </p>
+            </div>
+
+            <!-- 技术架构图 -->
+            <div class="architecture-container">
+                <div class="arch-flow">
+                    <!-- 应用层 -->
+                    <div class="arch-layer">
+                        <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                        <div class="layer-content">
+                            <h3 class="layer-title"><i class="fas fa-desktop"></i>应用交互层</h3>
+                            <p class="layer-desc">提供多维度知识服务入口，支持Web端、移动端、API等多种接入方式</p>
+                            <div class="layer-technologies">
+                                <div class="tech-category">
+                                    <span class="tech-category-label">前端框架:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('react')"><i class="fab fa-react"></i>React</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('vue')"><i class="fab fa-vuejs"></i>Vue 3</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('streamlit')"><i class="fas fa-code"></i>Streamlit</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">后端服务:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('fastapi')"><i class="fas fa-bolt"></i>FastAPI</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('springboot')"><i class="fas fa-leaf"></i>Spring Boot</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('gin')"><i class="fab fa-golang"></i>Gin</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">实时通信:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag" onclick="openTechDrawer('websocket')"><i class="fas fa-exchange-alt"></i>WebSocket</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('sse')"><i class="fas fa-stream"></i>SSE</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">AI客户端:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag popular" onclick="openTechDrawer('cherrystudio')"><i class="fas fa-laptop"></i>Cherry Studio</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('chatbox')"><i class="fas fa-comments"></i>Chatbox</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('nextchat')"><i class="fas fa-comment-dots"></i>NextChat</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+
+                    <!-- 智能体层 -->
+                    <div class="arch-layer">
+                        <div class="layer-icon"><i class="fas fa-robot"></i></div>
+                        <div class="layer-content">
+                            <h3 class="layer-title"><i class="fas fa-brain"></i>Agent智能体引擎</h3>
+                            <p class="layer-desc">基于大语言模型的智能Agent框架，支持任务规划、记忆管理、工具调用</p>
+                            <div class="layer-technologies">
+                                <div class="tech-category">
+                                    <span class="tech-category-label">Agent框架:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('langchain')"><i class="fas fa-link"></i>LangChain</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('llamaindex')"><i class="fas fa-mountain"></i>LlamaIndex</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('autogen')"><i class="fas fa-robot"></i>AutoGen</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">可视化编排:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('dify')"><i class="fas fa-magic"></i>Dify</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('coze')"><i class="fas fa-robot"></i>扣子 Coze</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('flowise')"><i class="fas fa-project-diagram"></i>Flowise</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('langflow')"><i class="fas fa-water"></i>LangFlow</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">AI工作平台:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag popular" onclick="openTechDrawer('ima')"><i class="fas fa-briefcase"></i>腾讯ima</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('feishu')"><i class="fas fa-paper-plane"></i>飞书智能伙伴</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">LLM网关:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag" onclick="openTechDrawer('litellm')"><i class="fas fa-plug"></i>LiteLLM</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('oneapi')"><i class="fas fa-key"></i>One API</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">大语言模型:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag popular" onclick="openTechDrawer('deepseek')"><i class="fas fa-brain"></i>DeepSeek</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('qwen')"><i class="fas fa-dragon"></i>通义千问</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('chatglm')"><i class="fas fa-robot"></i>ChatGLM</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('llama')"><i class="fas fa-horse"></i>Llama</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">本地部署:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('ollama')"><i class="fas fa-server"></i>Ollama</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('vllm')"><i class="fas fa-bolt"></i>vLLM</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('lmstudio')"><i class="fas fa-desktop"></i>LM Studio</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+
+                    <!-- RAG层 -->
+                    <div class="arch-layer">
+                        <div class="layer-icon"><i class="fas fa-search-plus"></i></div>
+                        <div class="layer-content">
+                            <h3 class="layer-title"><i class="fas fa-magnifying-glass-chart"></i>RAG检索增强</h3>
+                            <p class="layer-desc">融合向量检索、语义搜索、重排序的多路召回机制</p>
+                            <div class="layer-technologies">
+                                <div class="tech-category">
+                                    <span class="tech-category-label">向量数据库:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('chromadb')"><i class="fas fa-database"></i>ChromaDB</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('milvus')"><i class="fas fa-cubes"></i>Milvus</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('qdrant')"><i class="fas fa-database"></i>Qdrant</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('pinecone')"><i class="fas fa-cloud"></i>Pinecone</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">Embedding:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('bge')"><i class="fas fa-language"></i>BGE</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('m3e')"><i class="fas fa-language"></i>M3E</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('nomic')"><i class="fas fa-text-height"></i>nomic-embed</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('openaiembedding')"><i class="fas fa-robot"></i>text-embedding-3</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">重排序:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag" onclick="openTechDrawer('bgereranker')"><i class="fas fa-sort-amount-down"></i>BGE Reranker</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('cohere')"><i class="fas fa-sort"></i>Cohere Rerank</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+
+                    <!-- 数据处理层 -->
+                    <div class="arch-layer">
+                        <div class="layer-icon"><i class="fas fa-cogs"></i></div>
+                        <div class="layer-content">
+                            <h3 class="layer-title"><i class="fas fa-cog"></i>数据处理引擎</h3>
+                            <p class="layer-desc">多模态数据解析、向量化处理、知识图谱构建</p>
+                            <div class="layer-technologies">
+                                <div class="tech-category">
+                                    <span class="tech-category-label">文档解析:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('unstructured')"><i class="fas fa-file-alt"></i>Unstructured</span>
+                                        <span class="tech-tag popular" onclick="openTechDrawer('llamaparse')"><i class="fas fa-mountain"></i>LlamaParse</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('marker')"><i class="fas fa-book"></i>Marker</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('openparse')"><i class="fas fa-file-pdf"></i>OpenParse</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">文本切分:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag" onclick="openTechDrawer('langchainsplitter')"><i class="fas fa-cut"></i>RecursiveSplitter</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('semanticchunker')"><i class="fas fa-brain"></i>Semantic Chunker</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">知识图谱:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('neo4j')"><i class="fas fa-project-diagram"></i>Neo4j</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('nebula')"><i class="fas fa-globe"></i>NebulaGraph</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arrow-down"><i class="fas fa-chevron-down"></i></div>
+
+                    <!-- 数据存储层 -->
+                    <div class="arch-layer">
+                        <div class="layer-icon"><i class="fas fa-database"></i></div>
+                        <div class="layer-content">
+                            <h3 class="layer-title"><i class="fas fa-server"></i>多源数据接入</h3>
+                            <p class="layer-desc">支持文档、代码、GIS数据、数据库等多种数据源的统一接入管理</p>
+                            <div class="layer-technologies">
+                                <div class="tech-category">
+                                    <span class="tech-category-label">关系型数据库:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag recommended" onclick="openTechDrawer('postgresql')"><i class="fas fa-elephant"></i>PostgreSQL</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('mysql')"><i class="fas fa-database"></i>MySQL</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('postgis')"><i class="fas fa-map"></i>PostGIS</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">文档存储:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag" onclick="openTechDrawer('s3')"><i class="fas fa-cloud"></i>S3/MinIO</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('oss')"><i class="fas fa-cloud-upload-alt"></i>阿里云OSS</span>
+                                    </div>
+                                </div>
+                                <div class="tech-category">
+                                    <span class="tech-category-label">代码仓库:</span>
+                                    <div class="tech-tags">
+                                        <span class="tech-tag" onclick="openTechDrawer('git')"><i class="fab fa-git-alt"></i>Git</span>
+                                        <span class="tech-tag" onclick="openTechDrawer('gitlab')"><i class="fab fa-gitlab"></i>GitLab API</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 装饰分隔线 -->
+            <div class="divider">
+                <div class="divider-line"></div>
+                <div class="divider-icon"><i class="fas fa-gear"></i></div>
+                <div class="divider-line"></div>
+            </div>
+
+            <!-- 数据类型支持 -->
+            <div class="data-types-section">
+                <h2 class="section-title"><i class="fas fa-cubes"></i>多模态数据支持</h2>
+                <div class="data-types-grid">
+                    <!-- 文档类 -->
+                    <div class="data-type-card">
+                        <div class="data-type-header">
+                            <div class="data-type-icon icon-document"><i class="fas fa-file-alt"></i></div>
+                            <div>
+                                <h3 class="data-type-title">文档类数据</h3>
+                                <p class="data-type-subtitle">Office文档、PDF等</p>
+                            </div>
+                        </div>
+                        <div class="file-formats">
+                            <span class="format-badge"><i class="fas fa-file-word"></i>.doc/.docx</span>
+                            <span class="format-badge"><i class="fas fa-file-pdf"></i>.pdf</span>
+                            <span class="format-badge"><i class="fas fa-file-excel"></i>.xls/.xlsx</span>
+                            <span class="format-badge"><i class="fas fa-file-powerpoint"></i>.ppt/.pptx</span>
+                            <span class="format-badge"><i class="fas fa-file-alt"></i>.txt/.md</span>
+                        </div>
+                    </div>
+
+                    <!-- 代码类 -->
+                    <div class="data-type-card">
+                        <div class="data-type-header">
+                            <div class="data-type-icon icon-code"><i class="fas fa-code"></i></div>
+                            <div>
+                                <h3 class="data-type-title">项目代码类</h3>
+                                <p class="data-type-subtitle">源代码与项目结构</p>
+                            </div>
+                        </div>
+                        <div class="file-formats">
+                            <span class="format-badge"><i class="fab fa-python"></i>Python</span>
+                            <span class="format-badge"><i class="fab fa-js"></i>JavaScript</span>
+                            <span class="format-badge"><i class="fab fa-java"></i>Java</span>
+                            <span class="format-badge"><i class="fas fa-code"></i>C/C++</span>
+                            <span class="format-badge"><i class="fas fa-file-code"></i>更多...</span>
+                        </div>
+                    </div>
+
+                    <!-- GIS类 -->
+                    <div class="data-type-card">
+                        <div class="data-type-header">
+                            <div class="data-type-icon icon-gis"><i class="fas fa-map-marked-alt"></i></div>
+                            <div>
+                                <h3 class="data-type-title">GIS矢量数据</h3>
+                                <p class="data-type-subtitle">空间地理信息数据</p>
+                            </div>
+                        </div>
+                        <div class="file-formats">
+                            <span class="format-badge"><i class="fas fa-map"></i>.shp</span>
+                            <span class="format-badge"><i class="fas fa-database"></i>.gdb</span>
+                            <span class="format-badge"><i class="fas fa-globe"></i>GeoJSON</span>
+                            <span class="format-badge"><i class="fas fa-map-pin"></i>KML/KMZ</span>
+                            <span class="format-badge"><i class="fas fa-layer-group"></i>GeoPackage</span>
+                        </div>
+                    </div>
+
+                    <!-- 数据库类 -->
+                    <div class="data-type-card">
+                        <div class="data-type-header">
+                            <div class="data-type-icon icon-database"><i class="fas fa-database"></i></div>
+                            <div>
+                                <h3 class="data-type-title">关系型数据库</h3>
+                                <p class="data-type-subtitle">结构化数据存储</p>
+                            </div>
+                        </div>
+                        <div class="file-formats">
+                            <span class="format-badge"><i class="fas fa-elephant"></i>PostgreSQL</span>
+                            <span class="format-badge"><i class="fas fa-database"></i>MySQL</span>
+                            <span class="format-badge"><i class="fas fa-server"></i>SQL Server</span>
+                            <span class="format-badge"><i class="fas fa-database"></i>Oracle</span>
+                            <span class="format-badge"><i class="fas fa-table"></i>SQLite</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 部署方案对比 -->
+            <div class="deployment-section">
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-icon"><i class="fas fa-server"></i></div>
+                    <div class="divider-line"></div>
+                </div>
+
+                <h2 class="section-title" style="text-align: center; justify-content: center; margin-top: 40px;">
+                    <i class="fas fa-cloud-upload-alt"></i> 部署方案选型
+                </h2>
+                <p style="text-align: center; color: var(--text-secondary); max-width: 800px; margin: 0 auto 30px;">
+                    根据数据安全要求、成本预算和技术能力，选择最适合的部署方案
+                </p>
+
+                <div class="deployment-grid">
+                    <!-- 云知识库方案 -->
+                    <div class="deployment-card cloud">
+                        <div class="deployment-header">
+                            <div class="deployment-icon"><i class="fas fa-cloud"></i></div>
+                            <div>
+                                <div class="deployment-title">云知识库方案</div>
+                                <div class="deployment-subtitle">公有云托管 · 即开即用</div>
+                            </div>
+                        </div>
+
+                        <div class="deployment-content">
+                            <!-- 技术选型 -->
+                            <div class="deployment-section-title"><i class="fas fa-cubes"></i>技术选型</div>
+
+                            <div class="tech-stack-list">
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">零代码SaaS平台</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item" style="background: #e3f2fd; border-color: #42a5f5;"><i class="fas fa-robot"></i>扣子 Coze</span>
+                                        <span class="tech-stack-item" style="background: #e3f2fd; border-color: #42a5f5;"><i class="fas fa-briefcase"></i>腾讯ima</span>
+                                        <span class="tech-stack-item"><i class="fas fa-magic"></i>Dify Cloud</span>
+                                    </div>
+                                </div>
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">云服务提供商</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item"><i class="fas fa-cloud"></i>阿里云百炼</span>
+                                        <span class="tech-stack-item"><i class="fas fa-cloud"></i>阿里云PAI</span>
+                                        <span class="tech-stack-item"><i class="fas fa-cloud"></i>AWS Bedrock</span>
+                                        <span class="tech-stack-item"><i class="fas fa-cloud"></i>Azure OpenAI</span>
+                                        <span class="tech-stack-item"><i class="fas fa-cloud"></i>火山引擎</span>
+                                        <span class="tech-stack-item"><i class="fas fa-cloud"></i>腾讯云TI</span>
+                                    </div>
+                                </div>
+
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">向量数据库服务</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>阿里云向量检索</span>
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>Pinecone</span>
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>Zilliz Cloud</span>
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>Azure AI Search</span>
+                                    </div>
+                                </div>
+
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">大模型服务</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item"><i class="fas fa-brain"></i>GPT-4 Turbo</span>
+                                        <span class="tech-stack-item"><i class="fas fa-brain"></i>Claude 3</span>
+                                        <span class="tech-stack-item"><i class="fas fa-brain"></i>通义千问</span>
+                                        <span class="tech-stack-item"><i class="fas fa-brain"></i>文心一言</span>
+                                        <span class="tech-stack-item"><i class="fas fa-brain"></i>DeepSeek</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 适用场景 -->
+                            <div class="deployment-section-title"><i class="fas fa-bullseye"></i>适用场景</div>
+                            <ul class="scenario-list">
+                                <li>
+                                    <i class="fas fa-magic"></i>
+                                    <div>
+                                        <strong>零代码快速搭建</strong> 使用扣子(Coze)或腾讯ima，1小时搭建业务助手，无需任何代码，适合业务人员
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fas fa-rocket"></i>
+                                    <div>
+                                        <strong>快速启动项目</strong> 无需搭建基础设施，5分钟快速接入，适合MVP验证和POC演示
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fas fa-chart-line"></i>
+                                    <div>
+                                        <strong>弹性业务场景</strong> 业务量波动大，需要自动扩缩容，如电商大促、活动推广期间
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fas fa-users"></i>
+                                    <div>
+                                        <strong>中小企业应用</strong> 无专职运维团队，希望聚焦业务开发，降低运维负担
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fas fa-globe"></i>
+                                    <div>
+                                        <strong>全球化部署</strong> 需要多地域部署，就近访问，如跨国企业知识库
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 优劣势 -->
+                            <div class="pros-cons-horizontal">
+                                <div class="pros-cons-mini pros-mini">
+                                    <div class="pros-cons-mini-title"><i class="fas fa-check-circle"></i> 优势</div>
+                                    <ul>
+                                        <li>零运维成本</li>
+                                        <li>弹性伸缩</li>
+                                        <li>快速部署</li>
+                                        <li>全球加速</li>
+                                    </ul>
+                                </div>
+                                <div class="pros-cons-mini cons-mini">
+                                    <div class="pros-cons-mini-title"><i class="fas fa-times-circle"></i> 劣势</div>
+                                    <ul>
+                                        <li>数据上传云端</li>
+                                        <li>长期成本高</li>
+                                        <li>网络依赖</li>
+                                        <li>定制化受限</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="recommendation-badge cloud">
+                                <i class="fas fa-star"></i> 推荐：初创团队、快速验证、无专职运维
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 本地私有知识库方案 -->
+                    <div class="deployment-card local">
+                        <div class="deployment-header">
+                            <div class="deployment-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div>
+                                <div class="deployment-title">本地私有知识库</div>
+                                <div class="deployment-subtitle">私有化部署 · 数据自主可控</div>
+                            </div>
+                        </div>
+
+                        <div class="deployment-content">
+                            <!-- 技术选型 -->
+                            <div class="deployment-section-title"><i class="fas fa-cubes"></i>技术选型</div>
+
+                            <div class="tech-stack-list">
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">基础架构</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item"><i class="fas fa-server"></i>Kubernetes</span>
+                                        <span class="tech-stack-item"><i class="fas fa-docker"></i>Docker Compose</span>
+                                        <span class="tech-stack-item"><i class="fas fa-server"></i>VMware/Proxmox</span>
+                                        <span class="tech-stack-item"><i class="fas fa-cloud"></i>私有云(OpenStack)</span>
+                                    </div>
+                                </div>
+
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">本地向量数据库</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>Milvus</span>
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>ChromaDB</span>
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>pgvector</span>
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>Qdrant</span>
+                                        <span class="tech-stack-item"><i class="fas fa-database"></i>Weaviate</span>
+                                    </div>
+                                </div>
+
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">本地大模型部署</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item"><i class="fas fa-server"></i>Ollama</span>
+                                        <span class="tech-stack-item"><i class="fas fa-bolt"></i>vLLM</span>
+                                        <span class="tech-stack-item"><i class="fas fa-cube"></i>LLaMA.cpp</span>
+                                        <span class="tech-stack-item"><i class="fas fa-desktop"></i>LM Studio</span>
+                                        <span class="tech-stack-item"><i class="fas fa-microchip"></i>TensorRT-LLM</span>
+                                    </div>
+                                </div>
+
+                                <div class="tech-stack-category">
+                                    <div class="tech-stack-category-title">国产信创支持</div>
+                                    <div class="tech-stack-items">
+                                        <span class="tech-stack-item"><i class="fas fa-microchip"></i>华为昇腾</span>
+                                        <span class="tech-stack-item"><i class="fas fa-microchip"></i>寒武纪</span>
+                                        <span class="tech-stack-item"><i class="fas fa-microchip"></i>海光DCU</span>
+                                        <span class="tech-stack-item"><i class="fas fa-os"></i>麒麟OS</span>
+                                        <span class="tech-stack-item"><i class="fas os"></i>统信UOS</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 适用场景 -->
+                            <div class="deployment-section-title"><i class="fas fa-bullseye"></i>适用场景</div>
+                            <ul class="scenario-list">
+                                <li>
+                                    <i class="fas fa-lock"></i>
+                                    <div>
+                                        <strong>涉密数据处理</strong> 政府、军队、金融机构等涉密单位，数据不得出本地机房
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fas fa-balance-scale"></i>
+                                    <div>
+                                        <strong>合规监管要求</strong> 医疗、法律等行业需满足数据本地化存储法规要求
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fas fa-building"></i>
+                                    <div>
+                                        <strong>大型企业内部</strong> 已有完善的IT基础设施和运维团队，追求长期成本控制
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fas fa-flag"></i>
+                                    <div>
+                                        <strong>国产化信创替代</strong> 党政军及国企要求使用国产芯片、操作系统和软件栈
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <!-- 优劣势 -->
+                            <div class="pros-cons-horizontal">
+                                <div class="pros-cons-mini pros-mini">
+                                    <div class="pros-cons-mini-title"><i class="fas fa-check-circle"></i> 优势</div>
+                                    <ul>
+                                        <li>数据完全自主</li>
+                                        <li>长期成本低</li>
+                                        <li>定制化灵活</li>
+                                        <li>无网络依赖</li>
+                                    </ul>
+                                </div>
+                                <div class="pros-cons-mini cons-mini">
+                                    <div class="pros-cons-mini-title"><i class="fas fa-times-circle"></i> 劣势</div>
+                                    <ul>
+                                        <li>初期投入大</li>
+                                        <li>需要运维团队</li>
+                                        <li>部署周期长</li>
+                                        <li>硬件维护成本</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="recommendation-badge local">
+                                <i class="fas fa-star"></i> 推荐：政企单位、涉密场景、信创要求、大型企业
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 混合部署说明 -->
+                <div style="background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%); border-radius: var(--radius); padding: 25px; margin-top: 30px; border: 2px dashed #ffb300;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #ffb300, #ff8f00); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 18px; font-weight: 600; color: var(--dark-blue);">混合部署方案</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">兼顾灵活性与安全性</div>
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin: 0;">
+                        <strong>方案思路：</strong>非敏感业务使用云服务（如公开知识库、通用问答），敏感数据本地化处理（如内部文档、涉密资料）。通过网关层统一调度，实现成本与安全的平衡。
+                        <br><br>
+                        <strong>典型架构：</strong>前端应用 → API网关 → 敏感数据识别 → 涉密内容走本地LLM，公开内容走云端LLM → 统一响应
+                    </p>
+                </div>
+
+                <!-- SaaS平台快速方案 -->
+                <div style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-radius: var(--radius-lg); padding: 30px; margin-top: 30px; border: 2px solid #9c27b0;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <div style="width: 55px; height: 55px; background: linear-gradient(135deg, #9c27b0, #7b1fa2); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-size: 26px;">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 600; color: var(--dark-blue);">SaaS平台快速方案</div>
+                            <div style="font-size: 14px; color: var(--text-secondary);">无需开发，即开即用</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div style="background: white; border-radius: 12px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #4285f4, #34a853); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div style="font-weight: 600; color: var(--dark-blue);">扣子 Coze</div>
+                            </div>
+                            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 12px 0;">
+                                字节跳动推出的AI Bot开发平台，零代码搭建智能体，支持知识库、工作流、插件，一键发布到飞书/微信/抖音。
+                            </p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                <span style="padding: 3px 8px; background: #e8f5e9; color: #2e7d32; border-radius: 4px; font-size: 11px;">免费额度充足</span>
+                                <span style="padding: 3px 8px; background: #e3f2fd; color: #1565c0; border-radius: 4px; font-size: 11px;">零代码</span>
+                                <span style="padding: 3px 8px; background: #fff3e0; color: #e65100; border-radius: 4px; font-size: 11px;">多平台发布</span>
+                            </div>
+                        </div>
+
+                        <div style="background: white; border-radius: 12px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00a1d6, #0052d9); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <div style="font-weight: 600; color: var(--dark-blue);">腾讯ima</div>
+                            </div>
+                            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0 0 12px 0;">
+                                腾讯智能工作台，主打"会思考的知识库"。深度整合腾讯文档、企业微信，支持多源数据导入和团队协作。
+                            </p>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                <span style="padding: 3px 8px; background: #e8f5e9; color: #2e7d32; border-radius: 4px; font-size: 11px;">腾讯生态</span>
+                                <span style="padding: 3px 8px; background: #e3f2fd; color: #1565c0; border-radius: 4px; font-size: 11px;">团队协作</span>
+                                <span style="padding: 3px 8px; background: #fff3e0; color: #e65100; border-radius: 4px; font-size: 11px;">混合云</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.5); border-radius: 10px;">
+                        <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
+                            <strong style="color: var(--dark-blue);">推荐使用场景：</strong> 业务部门自助搭建知识库助手、营销团队快速部署客服机器人、内容团队管理素材库。 无需开发资源，业务人员即可独立完成，最快1小时上线。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特性展示 -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h4 class="feature-title">高效检索</h4>
+                    <p class="feature-desc">毫秒级向量检索，支持百万级知识库</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h4 class="feature-title">安全可靠</h4>
+                    <p class="feature-desc">数据隔离、权限控制、审计追踪</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-expand-arrows-alt"></i></div>
+                    <h4 class="feature-title">弹性扩展</h4>
+                    <p class="feature-desc">微服务架构，支持水平扩展</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-plug"></i></div>
+                    <h4 class="feature-title">开放集成</h4>
+                    <p class="feature-desc">RESTful API，支持第三方系统集成</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 右侧抽屉 -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeTechDrawer()"></div>
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+            <div class="drawer-title" id="drawerTitle">
+                <i class="fas fa-info-circle"></i>
+                <span>技术详情</span>
+            </div>
+            <button class="drawer-close" onclick="closeTechDrawer()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="drawer-body" id="drawerBody">
+            <!-- 动态内容 -->
+        </div>
+    </div>
+
+    <script>
+        // 技术选型详情数据
+        const techDetails = {
+            // 应用交互层 - 前端框架
+            'react': {
+                icon: 'fa-react',
+                title: 'React',
+                category: '前端框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>React是Facebook开发的JavaScript库，用于构建用户界面。采用组件化开发模式，通过虚拟DOM实现高效渲染，是目前最流行的前端框架之一。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>生态系统完善，社区活跃</li>
+                                <li>虚拟DOM性能优秀</li>
+                                <li>React Native跨平台</li>
+                                <li>丰富的第三方组件库</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>学习曲线较陡峭</li>
+                                <li>需要额外状态管理</li>
+                                <li>配置相对复杂</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>适用场景</h4>
+                        <div class="drawer-content">
+                            <p>大型企业级应用、需要高度交互的Web应用、跨平台移动应用、需要SEO优化的项目（配合Next.js）。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">Facebook</span>
+                        <span class="tag">组件化</span>
+                        <span class="tag">虚拟DOM</span>
+                        <span class="tag">Hooks</span>
+                    </div>
+                `
+            },
+            'vue': {
+                icon: 'fa-vuejs',
+                title: 'Vue 3',
+                category: '前端框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Vue.js是渐进式JavaScript框架，Vue 3引入Composition API，提供更好的TypeScript支持和性能优化。轻量级、易上手，在国内有大量使用者。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>学习曲线平缓，易上手</li>
+                                <li>模板语法直观清晰</li>
+                                <li>性能优秀，体积小</li>
+                                <li>官方生态完善</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>生态系统相对React较小</li>
+                                <li>TypeScript支持起步较晚</li>
+                                <li>大型项目最佳实践较少</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>适用场景</h4>
+                        <div class="drawer-content">
+                            <p>中小型企业应用、快速原型开发、国内政务项目、需要快速交付的项目。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">渐进式</span>
+                        <span class="tag">易上手</span>
+                        <span class="tag">Composition API</span>
+                        <span class="tag">Vite</span>
+                    </div>
+                `
+            },
+            'streamlit': {
+                icon: 'fa-code',
+                title: 'Streamlit',
+                category: '前端框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Streamlit是Python专用的高性能Web应用框架，专为机器学习和数据科学项目设计。仅需几行Python代码即可创建数据应用。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>纯Python开发，无需前端知识</li>
+                                <li>开发效率极高</li>
+                                <li>与ML库集成良好</li>
+                                <li>热重载支持</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>灵活性受限</li>
+                                <li>不适合复杂UI</li>
+                                <li>SEO支持差</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>适用场景</h4>
+                        <div class="drawer-content">
+                            <p>AI/ML模型演示、数据可视化、内部工具、快速原型、知识库Demo。</p>
+                        </div>
+                    </div>
+                `
+            },
+            // 应用交互层 - 后端服务
+            'fastapi': {
+                icon: 'fa-bolt',
+                title: 'FastAPI',
+                category: '后端框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>FastAPI是现代、高性能的Python Web框架，基于Starlette和Pydantic。自动生成OpenAPI文档，原生支持异步，性能媲美Node.js和Go。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>极高性能（Starlette）</li>
+                                <li>自动生成API文档</li>
+                                <li>原生异步支持</li>
+                                <li>数据验证（Pydantic）</li>
+                                <li>类型提示支持</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>社区生态相对Flask较小</li>
+                                <li>学习曲线较陡</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="code-block"><code># FastAPI示例
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/api/search")
+async def search(query: str):
+    return {"results": []}</code></div>
+                `
+            },
+            'springboot': {
+                icon: 'fa-leaf',
+                title: 'Spring Boot',
+                category: '后端框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Spring Boot是Java生态最流行的微服务框架，提供自动配置、内嵌服务器、生产级特性。适合大型企业级应用开发。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>企业级生态最完善</li>
+                                <li>微服务支持优秀</li>
+                                <li>安全性强</li>
+                                <li>运维工具丰富</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>启动较慢，内存占用大</li>
+                                <li>配置相对复杂</li>
+                                <li>开发效率不如Python</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>适用场景</h4>
+                        <div class="drawer-content">
+                            <p>大型企业级应用、金融系统、高并发系统、对稳定性要求极高的政务系统。</p>
+                        </div>
+                    </div>
+                `
+            },
+            // Agent框架
+            'langchain': {
+                icon: 'fa-link',
+                title: 'LangChain',
+                category: 'Agent框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>LangChain是最流行的LLM应用开发框架，提供模块化组件（Chains、Agents、Memory、Tools），支持构建复杂的RAG和Agent应用。</p>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-cubes"></i>核心组件</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i><span><b>Chains</b> - 模块化组件链式组合</span></li>
+                            <li><i class="fas fa-check-circle"></i><span><b>Agents</b> - 自主决策智能体</span></li>
+                            <li><i class="fas fa-check-circle"></i><span><b>Memory</b> - 对话上下文管理</span></li>
+                            <li><i class="fas fa-check-circle"></i><span><b>Retrieval</b> - RAG检索增强</span></li>
+                        </ul>
+                    </div>
+                    <div class="code-block"><code># LangChain RAG示例
+from langchain.chains import RetrievalQA
+
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    retriever=vectorstore.as_retriever(),
+    chain_type="stuff"
+)</code></div>
+                    <div class="tag-list">
+                        <span class="tag">Python/JS</span>
+                        <span class="tag">模块化</span>
+                        <span class="tag">社区活跃</span>
+                    </div>
+                `
+            },
+            'llamaindex': {
+                icon: 'fa-mountain',
+                title: 'LlamaIndex',
+                category: 'Agent框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>LlamaIndex专注于数据索引和检索，是构建RAG应用的首选框架。提供强大的数据加载、索引和查询接口。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>专注于RAG场景</li>
+                                <li>数据连接器丰富</li>
+                                <li>高级检索策略</li>
+                                <li>与LangChain互补</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'autogen': {
+                icon: 'fa-robot',
+                title: 'AutoGen',
+                category: 'Agent框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>AutoGen是微软开源的多Agent对话框架，支持多个AI Agent协作完成任务，可模拟软件工程师团队的工作模式。</p>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>核心特性</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-users"></i><span>多Agent对话编排</span></li>
+                            <li><i class="fas fa-code"></i><span>代码生成与执行</span></li>
+                            <li><i class="fas fa-cogs"></i><span>人机协同工作流</span></li>
+                        </ul>
+                    </div>
+                `
+            },
+            'dify': {
+                icon: 'fa-magic',
+                title: 'Dify',
+                category: '可视化编排',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Dify是开源的LLM应用开发平台，提供可视化Prompt编排、RAG、Agent工作流。支持私有化部署，适合企业级应用。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>可视化操作界面</li>
+                                <li>快速原型开发</li>
+                                <li>支持多人协作</li>
+                                <li>完善的中文文档</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'coze': {
+                icon: 'fa-robot',
+                title: '扣子 Coze',
+                category: '可视化编排',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>扣子（Coze）是字节跳动推出的AI Bot开发平台，提供零代码/低代码方式快速构建AI应用。支持知识库、工作流、插件商店，可一键发布到飞书、微信、抖音等平台。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>零代码搭建，极简上手</li>
+                                <li>免费额度充足（每天免费调用）</li>
+                                <li>插件生态丰富（60+官方插件）</li>
+                                <li>一键发布多平台（飞书/微信/抖音）</li>
+                                <li>内置GPT-4、Claude、豆包模型</li>
+                                <li>团队协作功能完善</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>数据存储在字节云端</li>
+                                <li>不支持私有化部署</li>
+                                <li>自定义能力受限</li>
+                                <li>工作流复杂度有限</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>核心功能</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-database"></i><span><b>知识库</b> - 支持文本/表格/图片，自动向量化</span></li>
+                            <li><i class="fas fa-project-diagram"></i><span><b>工作流</b> - 可视化流程编排，支持条件分支</span></li>
+                            <li><i class="fas fa-puzzle-piece"></i><span><b>插件</b> - 新闻搜索、图像生成、代码执行等</span></li>
+                            <li><i class="fas fa-comments"></i><span><b>长期记忆</b> - 用户画像和上下文记忆</span></li>
+                            <li><i class="fas fa-rocket"></i><span><b>触发器</b> - 定时任务、事件触发</span></li>
+                        </ul>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-building"></i>适用场景</h4>
+                        <div class="drawer-content">
+                            <p>🚀 <b>快速原型验证</b> - 1小时搭建业务助手</p>
+                            <p>👥 <b>内部办公助手</b> - HR/财务/IT问答机器人</p>
+                            <p>📱 <b>社交媒体运营</b> - 抖音/小红书内容生成</p>
+                            <p>📚 <b>知识库问答</b> - 企业文档智能检索</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">字节跳动</span>
+                        <span class="tag">零代码</span>
+                        <span class="tag">免费额度</span>
+                        <span class="tag">多平台发布</span>
+                        <span class="tag">飞书集成</span>
+                    </div>
+                `
+            },
+            'ima': {
+                icon: 'fa-briefcase',
+                title: '腾讯ima',
+                category: 'AI工作平台',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>腾讯ima（Intelligent Management Assistant）是腾讯推出的智能工作台，主打"会思考的知识库"。支持多源数据导入、智能问答、知识沉淀，深度整合腾讯文档生态。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>与腾讯文档无缝集成</li>
+                                <li>支持企业微信登录</li>
+                                <li>多人协作知识库</li>
+                                <li>混合云部署选项</li>
+                                <li>微信生态整合</li>
+                                <li>支持DeepSeek、混元模型</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>生态依赖腾讯系产品</li>
+                                <li>定制能力有限</li>
+                                <li>API开放程度一般</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>核心功能</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-cloud-upload-alt"></i><span><b>多源导入</b> - 本地文件/网页/腾讯文档/公众号</span></li>
+                            <li><i class="fas fa-brain"></i><span><b>智能解读</b> - 自动总结、提取要点、生成脑图</span></li>
+                            <li><i class="fas fa-search"></i><span><b>语义搜索</b> - 基于向量的知识库检索</span></li>
+                            <li><i class="fas fa-users"></i><span><b>共享空间</b> - 团队知识沉淀与共享</span></li>
+                            <li><i class="fas fa-robot"></i><span><b>智能写作</b> - 基于知识库内容生成文案</span></li>
+                        </ul>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-building"></i>适用场景</h4>
+                        <div class="drawer-content">
+                            <p>🏢 <b>企业知识管理</b> - 沉淀企业知识资产</p>
+                            <p>📝 <b>内容创作团队</b> - 素材管理与智能写作</p>
+                            <p>📖 <b>研究学习</b> - 论文/报告阅读与笔记</p>
+                            <p>💬 <b>客服场景</b> - 基于知识库的智能问答</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">腾讯</span>
+                        <span class="tag">知识库</span>
+                        <span class="tag">腾讯文档</span>
+                        <span class="tag">企业微信</span>
+                        <span class="tag">混合云</span>
+                    </div>
+                `
+            },
+            // 向量数据库
+            'chromadb': {
+                icon: 'fa-database',
+                title: 'ChromaDB',
+                category: '向量数据库',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>ChromaDB是专为AI应用设计的开源向量数据库，简单易用，支持本地和服务器模式。Python原生支持，与LangChain集成良好。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>极易上手，零配置</li>
+                                <li>Python原生支持</li>
+                                <li>本地持久化</li>
+                                <li>与LangChain完美集成</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>不适合超大规模数据</li>
+                                <li>分布式支持有限</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="code-block"><code># ChromaDB示例
+import chromadb
+
+client = chromadb.PersistentClient()
+collection = client.get_or_create_collection("docs")
+
+# 添加文档
+collection.add(
+    ids=["id1"],
+    embeddings=[[0.1, 0.2, ...]],
+    documents=["文本内容"]
+)</code></div>
+                `
+            },
+            'milvus': {
+                icon: 'fa-cubes',
+                title: 'Milvus',
+                category: '向量数据库',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Milvus是Zilliz开源的企业级向量数据库，支持十亿级向量检索，提供分布式架构和GPU加速。适合大规模生产环境。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>支持十亿级向量</li>
+                                <li>分布式架构</li>
+                                <li>GPU加速</li>
+                                <li>企业级特性完善</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>部署相对复杂</li>
+                                <li>资源占用较高</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>适用场景</h4>
+                        <div class="drawer-content">
+                            <p>大规模推荐系统、图像检索、企业级知识库、需要高并发的生产环境。</p>
+                        </div>
+                    </div>
+                `
+            },
+            'qdrant': {
+                icon: 'fa-database',
+                title: 'Qdrant',
+                category: '向量数据库',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Qdrant是用Rust编写的开源向量数据库，高性能、高可靠，支持向量+元数据混合查询。提供云服务和本地部署。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>性能优秀（Rust）</li>
+                                <li>混合查询支持</li>
+                                <li>过滤查询高效</li>
+                                <li>部署简单</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            // Embedding模型
+            'bge': {
+                icon: 'fa-language',
+                title: 'BGE Embedding',
+                category: 'Embedding模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>BAAI General Embedding (BGE) 是北京智源研究院开源的中英文Embedding模型，在MTEB榜单上表现优异，是国内RAG应用的首选。</p>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-list"></i>模型版本</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-star"></i><span><b>bge-large-zh</b> - 1024维，中文最优</span></li>
+                            <li><i class="fas fa-star"></i><span><b>bge-base-zh</b> - 768维，平衡选择</span></li>
+                            <li><i class="fas fa-star"></i><span><b>bge-small-zh</b> - 512维，轻量级</span></li>
+                            <li><i class="fas fa-star"></i><span><b>bge-m3</b> - 多语言支持</span></li>
+                        </ul>
+                    </div>
+                    <div class="code-block"><code># BGE使用示例
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer('BAAI/bge-large-zh')
+embeddings = model.encode(["文本内容"])</code></div>
+                `
+            },
+            'm3e': {
+                icon: 'fa-language',
+                title: 'M3E',
+                category: 'Embedding模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>M3E (Moka Massive Mixed Embedding) 是Moka开源的中文Embedding模型，针对中文语境优化，在中文语义相似度任务上表现优秀。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">中文优化</span>
+                        <span class="tag">768维</span>
+                        <span class="tag">开源免费</span>
+                    </div>
+                `
+            },
+            // 文档解析
+            'unstructured': {
+                icon: 'fa-file-alt',
+                title: 'Unstructured',
+                category: '文档解析',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Unstructured是专业的非结构化数据处理库，支持PDF、Word、HTML等多种格式的智能解析，能保留文档结构（标题、表格等）。</p>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-list"></i>支持格式</h4>
+                        <div class="tag-list">
+                            <span class="tag">PDF</span>
+                            <span class="tag">Word</span>
+                            <span class="tag">PowerPoint</span>
+                            <span class="tag">HTML</span>
+                            <span class="tag">图片(OCR)</span>
+                        </div>
+                    </div>
+                    <div class="code-block"><code>from unstructured.partition.pdf import partition_pdf
+
+elements = partition_pdf("document.pdf")
+for element in elements:
+    print(element.text)</code></div>
+                `
+            },
+            'llamaparse': {
+                icon: 'fa-mountain',
+                title: 'LlamaParse',
+                category: '文档解析',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>LlamaParse是LlamaIndex推出的专业PDF解析服务，针对RAG场景优化，能准确提取表格、图表等复杂内容，支持Markdown输出。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>针对RAG优化</li>
+                                <li>表格提取准确</li>
+                                <li>Markdown输出</li>
+                                <li>与LlamaIndex集成</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>云服务收费</li>
+                                <li>依赖网络</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'marker': {
+                icon: 'fa-book',
+                title: 'Marker',
+                category: '文档解析',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Marker是开源的PDF转Markdown工具，基于深度学习模型，能准确识别文档结构、公式、表格，输出高质量的Markdown格式。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>开源免费</li>
+                                <li>本地运行</li>
+                                <li>Markdown输出质量高</li>
+                                <li>公式识别支持</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            // 知识图谱
+            'neo4j': {
+                icon: 'fa-project-diagram',
+                title: 'Neo4j',
+                category: '图数据库',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Neo4j是最流行的图数据库，使用Cypher查询语言，支持ACID事务，提供可视化界面。适合存储和查询复杂的实体关系网络。</p>
+                        </div>
+                    </div>
+                    <div class="code-block"><code># Cypher查询示例
+MATCH (p:Person)-[:WORKS_AT]->(c:Company)
+WHERE c.name = 'Apple'
+RETURN p.name</code></div>
+                    <div class="tag-list">
+                        <span class="tag">Cypher</span>
+                        <span class="tag">ACID</span>
+                        <span class="tag">可视化</span>
+                    </div>
+                `
+            },
+            // 数据存储
+            'postgresql': {
+                icon: 'fa-elephant',
+                title: 'PostgreSQL',
+                category: '关系型数据库',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>PostgreSQL是功能最强大的开源关系型数据库，支持JSON、全文搜索、扩展插件。结合pgvector插件可存储向量数据。</p>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-plug"></i>常用扩展</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-vector-square"></i><span><b>pgvector</b> - 向量存储</span></li>
+                            <li><i class="fas fa-map"></i><span><b>PostGIS</b> - 空间数据</span></li>
+                            <li><i class="fas fa-search"></i><span><b>pg_trgm</b> - 模糊搜索</span></li>
+                        </ul>
+                    </div>
+                `
+            },
+            'postgis': {
+                icon: 'fa-map',
+                title: 'PostGIS',
+                category: '空间数据库',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>PostGIS是PostgreSQL的空间数据库扩展，支持存储、查询和分析空间数据。支持OGC标准，是GIS应用的首选数据库方案。</p>
+                        </div>
+                    </div>
+                    <div class="code-block"><code># PostGIS空间查询
+SELECT name, ST_Area(geom) as area
+FROM districts
+WHERE ST_Within(
+    geom,
+    ST_GeomFromText('POLYGON(...)')
+)</code></div>
+                `
+            },
+            // Cherry Studio
+            'cherrystudio': {
+                icon: 'fa-laptop',
+                title: 'Cherry Studio',
+                category: 'AI客户端',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Cherry Studio 是一款功能强大的开源 AI 客户端桌面应用，支持 Windows、macOS 和 Linux。支持多模型服务提供商，提供丰富的 Prompt 管理和知识库功能。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>开源免费，代码透明</li>
+                                <li>支持多平台（Win/Mac/Linux）</li>
+                                <li>多模型提供商统一管理</li>
+                                <li>本地知识库支持</li>
+                                <li>界面美观，体验流畅</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>功能相对简单</li>
+                                <li>团队协作功能弱</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-star"></i>支持模型</h4>
+                        <div class="tag-list">
+                            <span class="tag">OpenAI</span>
+                            <span class="tag">Azure</span>
+                            <span class="tag">Gemini</span>
+                            <span class="tag">Anthropic</span>
+                            <span class="tag">Ollama</span>
+                            <span class="tag">DeepSeek</span>
+                        </div>
+                    </div>
+                `
+            },
+            'chatbox': {
+                icon: 'fa-comments',
+                title: 'Chatbox',
+                category: 'AI客户端',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Chatbox 是一款开源的 ChatGPT 桌面客户端，界面简洁，支持多种 API 格式。适合个人开发者使用，支持本地数据存储。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">开源</span>
+                        <span class="tag">轻量级</span>
+                        <span class="tag">跨平台</span>
+                    </div>
+                `
+            },
+            'nextchat': {
+                icon: 'fa-comment-dots',
+                title: 'NextChat',
+                category: 'AI客户端',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>NextChat（ChatGPT-Next-Web）是一款基于 Next.js 开发的 ChatGPT Web 应用，可一键部署到 Vercel，支持 PWA，界面精美。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">Next.js</span>
+                        <span class="tag">PWA</span>
+                        <span class="tag">一键部署</span>
+                    </div>
+                `
+            },
+            // Ollama
+            'ollama': {
+                icon: 'fa-server',
+                title: 'Ollama',
+                category: '本地部署',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Ollama 是开源的本地大语言模型运行平台，支持 macOS、Linux 和 Windows。一行命令即可运行 Llama、DeepSeek、Qwen 等开源模型，提供简洁的 CLI 和 REST API。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>一键运行，零配置</li>
+                                <li>模型库丰富（100+）</li>
+                                <li>支持 GGUF 格式</li>
+                                <li>REST API 兼容 OpenAI</li>
+                                <li>多模态支持（Llava）</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>需要 GPU 获得好体验</li>
+                                <li>大模型占用内存多</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="code-block"><code># 安装并运行模型
+ollama run llama3.2
+ollama run deepseek-coder
+ollama run qwen2.5
+
+# REST API调用
+curl http://localhost:11434/api/generate -d '{
+  "model": "llama3.2",
+  "prompt": "Hello"
+}'</code></div>
+                    <div class="tag-list">
+                        <span class="tag">本地运行</span>
+                        <span class="tag">隐私保护</span>
+                        <span class="tag">开源免费</span>
+                        <span class="tag">GGUF</span>
+                    </div>
+                `
+            },
+            'vllm': {
+                icon: 'fa-bolt',
+                title: 'vLLM',
+                category: '本地部署',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>vLLM 是伯克利大学开源的高吞吐量 LLM 推理引擎，采用 PagedAttention 技术，推理吞吐量提升 24 倍。适合生产环境部署。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">高吞吐</span>
+                        <span class="tag">PagedAttention</span>
+                        <span class="tag">生产级</span>
+                    </div>
+                `
+            },
+            'lmstudio': {
+                icon: 'fa-desktop',
+                title: 'LM Studio',
+                category: '本地部署',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>LM Studio 是图形化的本地 LLM 管理工具，支持模型搜索、下载、对话。界面友好，适合非技术用户使用。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">图形界面</span>
+                        <span class="tag">易用</span>
+                        <span class="tag">模型管理</span>
+                    </div>
+                `
+            },
+            // DeepSeek
+            'deepseek': {
+                icon: 'fa-brain',
+                title: 'DeepSeek',
+                category: '大语言模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>DeepSeek（深度求索）是国内领先的 AI 公司，开源了 DeepSeek-V2、DeepSeek-Coder 等系列大模型。以高性价比著称，API 价格极具竞争力，代码能力优秀。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>性价比极高（1元/百万token）</li>
+                                <li>代码生成能力强</li>
+                                <li>开源模型可本地部署</li>
+                                <li>中文理解优秀</li>
+                                <li>支持 128K 长上下文</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>品牌知名度不如GPT-4</li>
+                                <li>多模态能力较弱</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-cube"></i>模型系列</h4>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-star"></i><span><b>DeepSeek-V2.5</b> - 通用对话模型</span></li>
+                            <li><i class="fas fa-code"></i><span><b>DeepSeek-Coder-V2</b> - 代码专用模型</span></li>
+                            <li><i class="fas fa-graduation-cap"></i><span><b>DeepSeek-Math</b> - 数学推理</span></li>
+                        </ul>
+                    </div>
+                    <div class="code-block"><code># OpenAI SDK 调用
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="your-api-key",
+    base_url="https://api.deepseek.com"
+)
+
+response = client.chat.completions.create(
+    model="deepseek-chat",
+    messages=[{"role": "user", "content": "Hello"}]
+)</code></div>
+                `
+            },
+            'qwen': {
+                icon: 'fa-dragon',
+                title: '通义千问',
+                category: '大语言模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>通义千问（Qwen）是阿里云开源的大语言模型系列，包括 Qwen、Qwen-VL（视觉）、Qwen-Audio（语音）等多模态模型。开源协议友好（Apache 2.0），社区生态活跃。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">阿里</span>
+                        <span class="tag">多模态</span>
+                        <span class="tag">Apache 2.0</span>
+                    </div>
+                `
+            },
+            'chatglm': {
+                icon: 'fa-robot',
+                title: 'ChatGLM',
+                category: '大语言模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>ChatGLM 是智谱 AI 开源的对话模型，支持中英双语。最新版 ChatGLM3 支持工具调用、代码解释器等功能。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">智谱AI</span>
+                        <span class="tag">双语</span>
+                        <span class="tag">工具调用</span>
+                    </div>
+                `
+            },
+            'llama': {
+                icon: 'fa-horse',
+                title: 'Llama',
+                category: '大语言模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Llama 是 Meta 开源的大语言模型系列，Llama 3 是最新版本。开源可商用，生态最丰富，HuggingFace 上模型变种最多。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">Meta</span>
+                        <span class="tag">可商用</span>
+                        <span class="tag">生态丰富</span>
+                    </div>
+                `
+            },
+            // nomic-embed-text
+            'nomic': {
+                icon: 'fa-text-height',
+                title: 'nomic-embed-text',
+                category: 'Embedding模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>nomic-embed-text 是 Nomic AI 开源的文本嵌入模型，完全开源可复现（训练数据、代码全公开）。性能超越 OpenAI text-embedding-ada-002，上下文长度 8192 tokens。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>完全开源可复现</li>
+                                <li>性能超越 Ada-002</li>
+                                <li>768维向量，体积小</li>
+                                <li>上下文长度 8192</li>
+                                <li>Apache 2.0 协议</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>中文优化不如 BGE</li>
+                                <li>知名度相对较低</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="code-block"><code># 使用 Ollama 运行
+ollama pull nomic-embed-text
+
+# 生成向量
+curl http://localhost:11434/api/embeddings -d '{
+  "model": "nomic-embed-text",
+  "prompt": "需要嵌入的文本"
+}'</code></div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-chart-line"></i>性能对比</h4>
+                        <div class="drawer-content">
+                            <p>MTEB 榜单得分：</p>
+                            <ul>
+                                <li>nomic-embed-text-v1.5: <b>62.28</b></li>
+                                <li>OpenAI text-embedding-ada-002: 61.0</li>
+                                <li>BGE-small-en: 62.12</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">完全开源</span>
+                        <span class="tag">768维</span>
+                        <span class="tag">8K上下文</span>
+                        <span class="tag"> Apache 2.0</span>
+                    </div>
+                `
+            },
+            // 其他常用技术
+            'websocket': {
+                icon: 'fa-exchange-alt',
+                title: 'WebSocket',
+                category: '实时通信',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>WebSocket提供全双工通信通道，适合实现实时对话、流式响应等场景。在AI聊天应用中用于实现打字机效果。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>真正的实时双向通信</li>
+                                <li>低延迟</li>
+                                <li>适合流式响应</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'gin': {
+                icon: 'fa-code',
+                title: 'Gin',
+                category: '后端框架',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Gin是Go语言的高性能Web框架，以速度著称，内存占用低。适合构建高性能API服务，在性能敏感场景下是Python的替代方案。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">Go</span>
+                        <span class="tag">高性能</span>
+                        <span class="tag">低内存</span>
+                    </div>
+                `
+            },
+            'pinecone': {
+                icon: 'fa-cloud',
+                title: 'Pinecone',
+                category: '向量数据库',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Pinecone是托管向量数据库服务，无需管理基础设施，提供自动扩展、高可用。适合快速启动项目，但成本较高。</p>
+                        </div>
+                    </div>
+                    <div class="pros-cons">
+                        <div class="pros-cons-box pros-box">
+                            <div class="pros-cons-title"><i class="fas fa-check"></i> 优势</div>
+                            <ul class="pros-cons-list">
+                                <li>完全托管，零运维</li>
+                                <li>快速启动</li>
+                                <li>自动扩展</li>
+                            </ul>
+                        </div>
+                        <div class="pros-cons-box cons-box">
+                            <div class="pros-cons-title"><i class="fas fa-times"></i> 劣势</div>
+                            <ul class="pros-cons-list">
+                                <li>成本较高</li>
+                                <li>数据在云端</li>
+                                <li>网络依赖</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            'litellm': {
+                icon: 'fa-plug',
+                title: 'LiteLLM',
+                category: 'LLM网关',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>LiteLLM是开源的LLM网关，统一调用接口支持100+模型提供商，提供负载均衡、速率限制、成本追踪等企业级功能。</p>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-list"></i>支持模型</h4>
+                        <div class="tag-list">
+                            <span class="tag">OpenAI</span>
+                            <span class="tag">Anthropic</span>
+                            <span class="tag">Azure</span>
+                            <span class="tag">AWS Bedrock</span>
+                            <span class="tag">本地模型</span>
+                        </div>
+                    </div>
+                `
+            },
+            'bgereranker': {
+                icon: 'fa-sort-amount-down',
+                title: 'BGE Reranker',
+                category: '重排序模型',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>BGE Reranker是交叉编码器（Cross-Encoder）模型，对初筛后的候选文档进行精准排序。比Bi-Encoder更精确，但计算成本更高。</p>
+                        </div>
+                    </div>
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-lightbulb"></i>使用建议</h4>
+                        <div class="drawer-content">
+                            <p>在RAG流程中，先用向量检索召回Top-K（如50个），再用Reranker排序选出Top-N（如5个），平衡效率和精度。</p>
+                        </div>
+                    </div>
+                `
+            },
+            'flowise': {
+                icon: 'fa-project-diagram',
+                title: 'Flowise',
+                category: '可视化编排',
+                content: `
+                    <div class="drawer-section">
+                        <h4 class="drawer-section-title"><i class="fas fa-info-circle"></i>技术简介</h4>
+                        <div class="drawer-content">
+                            <p>Flowise是基于LangChain的可视化工作流编辑器，通过拖拽方式构建LLM应用，支持导出为API。适合快速原型和非技术人员。</p>
+                        </div>
+                    </div>
+                    <div class="tag-list">
+                        <span class="tag">拖拽编排</span>
+                        <span class="tag">开源</span>
+                        <span class="tag">LangChain</span>
+                    </div>
+                `
+            }
+        };
+
+        // 打开抽屉
+        function openTechDrawer(techKey) {
+            const tech = techDetails[techKey];
+            if (!tech) {
+                console.warn('未知技术:', techKey);
+                return;
+            }
+
+            document.getElementById('drawerTitle').innerHTML = `
+                <i class="fas ${tech.icon}"></i>
+                <div>
+                    <div style="font-size: 14px; color: var(--accent-blue); margin-bottom: 2px;">${tech.category}</div>
+                    <div>${tech.title}</div>
+                </div>
+            `;
+            document.getElementById('drawerBody').innerHTML = tech.content;
+
+            document.getElementById('drawerOverlay').classList.add('active');
+            document.getElementById('drawer').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭抽屉
+        function closeTechDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('active');
+            document.getElementById('drawer').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ESC键关闭抽屉
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeTechDrawer();
+        });
+    </script>
+</body>
+
+</html>
