@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知识库智能体系统 - 海纳设想</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+         :root {
+            --primary-blue: #1a5fb4;
+            --dark-blue: #0d3a7a;
+            --light-blue: #e8f4fd;
+            --accent-blue: #3584e4;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5a5a5a;
+            --white: #ffffff;
+            --border-color: #d0e3f0;
+            --shadow: 0 4px 20px rgba(26, 95, 180, 0.15);
+            --shadow-hover: 0 8px 30px rgba(26, 95, 180, 0.25);
+            --radius: 12px;
+            --radius-lg: 20px;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f7ff 0%, #e8f4fd 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #1a5fb4 0%, #0d3a7a 100%);
+            padding: 0 40px;
+            box-shadow: 0 4px 20px rgba(13, 58, 122, 0.3);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--white);
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        .logo i {
+            font-size: 28px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-tab {
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary-blue);
+        }
+        
+        .main-content {
+            margin-top: 70px;
+            padding: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .page-title {
+            font-size: 42px;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .page-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 28px;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-blue);
+        }
+        
+        .section-title i {
+            color: var(--accent-blue);
+            font-size: 32px;
+        }
+        
+        .subsection-title {
+            font-size: 22px;
+            color: var(--primary-blue);
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .subsection-title .num {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .content-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .content-list li {
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #f8fbff 0%, #f0f7ff 100%);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--accent-blue);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .content-list li:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+        
+        .content-list li i {
+            color: var(--accent-blue);
+            margin-top: 3px;
+            font-size: 18px;
+        }
+        
+        .content-list li span {
+            flex: 1;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+        
+        .scene-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .scene-card {
+            background: linear-gradient(135deg, #f8fbff 0%, #f0f7ff 100%);
+            border-radius: var(--radius);
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scene-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+        }
+        
+        .scene-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .scene-card i {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+        }
+        
+        .scene-card h4 {
+            font-size: 18px;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+        
+        .scene-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .tag-group {
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+            .nav-tab {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            .nav-tab span {
+                display: none;
+            }
+            .main-content {
+                padding: 20px;
+            }
+            .page-title {
+                font-size: 28px;
+            }
+            .section-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            <span>知识库智能体</span>
+        </div>
+        <div class="nav-tabs">
+            <a href="index.html" class="nav-tab">
+                <i class="fas fa-sitemap"></i>
+                <span>技术路线</span>
+            </a>
+            <a href="deployment.html" class="nav-tab">
+                <i class="fas fa-server"></i>
+                <span>部署案例</span>
+            </a>
+            <a href="demo.html" class="nav-tab">
+                <i class="fas fa-rocket"></i>
+                <span>Demo</span>
+            </a>
+            <a href="haina-thinking.html" class="nav-tab active">
+                <i class="fas fa-lightbulb"></i>
+                <span>海纳设想</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-lightbulb"></i> 海纳设想
+            </h1>
+            <p class="page-subtitle">
+                重大工程地震安全性评价咨询 — 知识库智能体的前沿应用场景设想
+            </p>
+        </div>
+
+        <!-- 主题概述 -->
+        <div class="section-card">
+            <h2 class="section-title">
+                <i class="fas fa-bullseye"></i> 核心主题
+            </h2>
+            <p style="font-size: 18px; color: var(--text-primary); line-height: 1.8;">
+                面向<strong>重大工程地震安全性评价</strong>领域，构建专业化的知识库智能体系统，为工程咨询、政策解读、技术评估提供智能化支撑。
+            </p>
+            <div class="tag-group">
+                <span class="tag"><i class="fas fa-book"></i> 知识库</span>
+                <span class="tag"><i class="fas fa-robot"></i> 智能体</span>
+                <span class="tag"><i class="fas fa-map-marked-alt"></i> 空间分析</span>
+                <span class="tag"><i class="fas fa-file-pdf"></i> PDF解析</span>
+                <span class="tag"><i class="fas fa-calculator"></i> 费用估算</span>
+            </div>
+        </div>
+
+        <!-- 知识库建设 -->
+        <div class="section-card">
+            <h2 class="section-title">
+                <i class="fas fa-database"></i> 知识库建设
+            </h2>
+
+            <div class="subsection-title">
+                <span class="num">1</span>
+                <span>基础文档类知识</span>
+            </div>
+            <ul class="content-list">
+                <li><i class="fas fa-check-circle"></i><span>什么叫重大工程项目？包含哪些类型？</span></li>
+                <li><i class="fas fa-check-circle"></i><span>地震安全性评价都包含哪些内容？</span></li>
+                <li><i class="fas fa-check-circle"></i><span>浙江省相关主管部门信息</span></li>
+                <li><i class="fas fa-check-circle"></i><span>浙江省具备地震安全性评价资质的单位信息</span></li>
+            </ul>
+
+            <div class="subsection-title">
+                <span class="num">2</span>
+                <span>法律法规、政策、标准规范类</span>
+            </div>
+            <ul class="content-list">
+                <li><i class="fas fa-gavel"></i><span>什么情况下需要进行地震安全性评价？</span></li>
+                <li><i class="fas fa-gavel"></i><span>所依据的法律法规和政策文件</span></li>
+            </ul>
+
+            <div class="subsection-title">
+                <span class="num">3</span>
+                <span>空间数据</span>
+            </div>
+            <ul class="content-list">
+                <li><i class="fas fa-globe-asia"></i><span>浙江省及其周边地震断裂带、历史地震数据</span></li>
+            </ul>
+
+            <div class="subsection-title">
+                <span class="num">4</span>
+                <span>典型评价报告（根据不同的类型分别设置典型报告格式）</span>
+            </div>
+            <ul class="content-list">
+                <li><i class="fas fa-file-alt"></i><span>备注：去除具体地名、空间位置、具体参数等敏感信息之后，形成若干典型报告格式</span></li>
+            </ul>
+        </div>
+
+        <!-- 智能体建设 -->
+        <div class="section-card">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i> 智能体建设
+            </h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                <div class="scene-card">
+                    <i class="fas fa-map"></i>
+                    <h4>矢量数据查询</h4>
+                    <p>支持空间数据的快速检索与查询，实现地理信息的高效获取</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-crosshairs"></i>
+                    <h4>空间定位</h4>
+                    <p>基于坐标系的精确定位服务，辅助工程选址与评估</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-chart-area"></i>
+                    <h4>空间分析</h4>
+                    <p>提供缓冲区分析、叠加分析等GIS核心功能</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-file-pdf"></i>
+                    <h4>PDF文档解析</h4>
+                    <p>智能提取PDF中的文字、图表信息，支持多模态内容理解</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 使用场景 -->
+        <div class="section-card">
+            <h2 class="section-title">
+                <i class="fas fa-tasks"></i> 使用场景
+            </h2>
+            <div class="scene-grid">
+                <div class="scene-card">
+                    <i class="fas fa-question-circle"></i>
+                    <h4>安评必要性查询</h4>
+                    <p>查询某类项目是否需要进行地震安全性评价</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-coins"></i>
+                    <h4>费用估算</h4>
+                    <p>输入项目建设范围和基本简介进行费用估算</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-file-contract"></i>
+                    <h4>报告格式查询</h4>
+                    <p>查询地震安评成果报告的标准格式与模板</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-chart-pie"></i>
+                    <h4>评价图表样式</h4>
+                    <p>查询某类评价所需的图表样式与展示规范</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-building"></i>
+                    <h4>主管部门查询</h4>
+                    <p>查询相关主管部门的联系方式与审批流程</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-user-check"></i>
+                    <h4>评价单位查询</h4>
+                    <p>查询哪些单位可进行地震安全性评价</p>
+                </div>
+                <div class="scene-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h4>专家信息查询</h4>
+                    <p>查询相关领域专家信息</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
