@@ -605,8 +605,8 @@
             color: var(--text-secondary);
             line-height: 1.6;
         }
-        
         /* 路线图 */
+        
         .roadmap-section {
             background: var(--white);
             border-radius: var(--radius-lg);
@@ -706,8 +706,8 @@
             font-size: 24px;
             flex-shrink: 0;
         }
-        
         /* 技术选型对比 */
+        
         .tech-compare-section {
             background: var(--white);
             border-radius: var(--radius-lg);
@@ -784,7 +784,6 @@
             transform: translateY(-50%);
             font-size: 10px;
         }
-        
         /* 知识库原理图 */
         
         .principle-section {
@@ -878,7 +877,6 @@
             color: var(--text-secondary);
             line-height: 1.6;
         }
-        
         /* 架构图 */
         
         .arch-diagram {
@@ -1064,6 +1062,111 @@
          ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-blue);
         }
+        /* 升级亮点 */
+        
+        .upgrade-section {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d4e9f9 100%);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        
+        .upgrade-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .upgrade-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+        }
+        
+        .upgrade-title {
+            font-size: 22px;
+            color: var(--dark-blue);
+        }
+        
+        .upgrade-title span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: normal;
+            margin-top: 5px;
+        }
+        
+        .upgrade-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .upgrade-item {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .upgrade-item:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .upgrade-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .upgrade-item-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .upgrade-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .upgrade-item-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .upgrade-compare {
+            margin-top: 12px;
+            padding: 10px;
+            background: #f8fbff;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .upgrade-compare strong {
+            color: var(--accent-blue);
+        }
     </style>
 </head>
 
@@ -1085,7 +1188,11 @@
             </a>
             <a href="demo.html" class="nav-tab">
                 <i class="fas fa-rocket"></i>
-                <span>案例(WebUI...)</span>
+                <span>Demo</span>
+            </a>
+            <a href="haina-thinking.html" class="nav-tab">
+                <i class="fas fa-lightbulb"></i>
+                <span>海纳设想</span>
             </a>
         </div>
     </nav>
@@ -1096,7 +1203,7 @@
                 <i class="fas fa-server"></i> 私有化部署实战案例
             </h1>
             <p class="page-subtitle">
-                基于 Ollama + DeepSeek + Nomic-Embed + Cherry Studio 的本地知识库建设方案
+                基于 Ollama + DeepSeek + Nomic-Embed + Dify 的本地知识库建设方案
             </p>
         </div>
 
@@ -1214,16 +1321,101 @@
                     <div class="tech-card">
                         <div class="tech-card-header">
                             <div class="tech-card-icon client">
-                                <i class="fas fa-laptop"></i>
+                                <i class="fas fa-cloud"></i>
                             </div>
                             <div>
-                                <div class="tech-card-title">Cherry Studio</div>
-                                <div class="tech-card-subtitle">AI 客户端</div>
+                                <div class="tech-card-title">Dify</div>
+                                <div class="tech-card-subtitle">LLM 应用开发平台</div>
                             </div>
                         </div>
                         <div class="tech-card-content">
-                            开源 AI 客户端，支持多模型管理和知识库功能。通过配置本地 Ollama 接口，实现完全离线的智能问答体验。
+                            开源 LLM 应用开发平台，支持通过 Docker 一键部署。内置知识库（RAG）、Agent、工作流编排能力，可对接 Ollama 本地模型，提供 Web 访问入口与团队协作功能。
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 升级亮点 -->
+        <div class="upgrade-section">
+            <div class="upgrade-header">
+                <div class="upgrade-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="upgrade-title">
+                    升级亮点：Cherry Studio → Dify
+                    <span>从单机客户端到企业级 LLM 应用平台的跨越</span>
+                </div>
+            </div>
+            <div class="upgrade-grid">
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-globe"></i></div>
+                        <div class="upgrade-item-title">Web 化访问</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        无需安装桌面客户端，浏览器即开即用。支持内网部署，团队成员通过统一 URL 访问，大幅降低推广和运维成本。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>每人需下载安装 Cherry Studio 客户端，仅支持单机使用
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-users"></i></div>
+                        <div class="upgrade-item-title">团队协作</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        支持多用户注册、知识库共享、权限分级管理。管理员可控制谁能查看、编辑或发布知识库内容。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>知识库分散在个人电脑，无法共享和统一管理
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-project-diagram"></i></div>
+                        <div class="upgrade-item-title">工作流编排</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        可视化拖拽构建复杂 AI 工作流，支持条件分支、变量传递、多模型串联。将重复性业务逻辑自动化。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>仅支持单轮对话，无法处理多步骤复杂业务流程
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-robot"></i></div>
+                        <div class="upgrade-item-title">Agent 智能体</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        内置 ReAct / Function Calling 智能体框架，可调用外部工具（如数据库查询、GIS 分析），实现自主任务执行。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>无工具调用能力，模型仅能基于已有知识回答问题
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-code"></i></div>
+                        <div class="upgrade-item-title">API 发布</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        一键将知识库应用发布为标准 REST API，方便对接现有业务系统（如 OA、GIS 平台、微信小程序）。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>仅能在客户端内使用，无法嵌入第三方系统
+                    </div>
+                </div>
+                <div class="upgrade-item">
+                    <div class="upgrade-item-header">
+                        <div class="upgrade-item-icon"><i class="fas fa-database"></i></div>
+                        <div class="upgrade-item-title">专业 RAG 能力</div>
+                    </div>
+                    <div class="upgrade-item-content">
+                        支持自动/自定义分段、引用溯源、重排序（Rerank）、多知识库联合检索，大幅提升问答准确率。
+                    </div>
+                    <div class="upgrade-compare">
+                        <strong>升级前：</strong>基础文本切分，无引用溯源和高级检索策略
                     </div>
                 </div>
             </div>
@@ -1238,8 +1430,8 @@
                 <div class="arch-layer">
                     <div class="arch-icon"><i class="fas fa-laptop"></i></div>
                     <div class="arch-content">
-                        <div class="arch-title">Cherry Studio 客户端</div>
-                        <div class="arch-desc">用户交互界面，配置本地 Ollama 接口，管理知识库和对话历史</div>
+                        <div class="arch-title">Dify 平台</div>
+                        <div class="arch-desc">通过 Docker 部署的 Web 应用平台，配置 Ollama 模型提供商，管理知识库、Agent 和工作流</div>
                     </div>
                 </div>
                 <div class="arch-arrow"><i class="fas fa-arrow-down"></i></div>
@@ -1275,7 +1467,7 @@
                 <i class="fas fa-cogs"></i> 知识库原理解析（RAG流程）
             </div>
             <div class="principle-desc">
-                <p>基于 Cherry Studio 官方文档的 RAG（检索增强生成）工作流程。系统通过向量检索将用户问题与知识库文档片段关联，再由大模型生成精准答案。</p>
+                <p>基于 Dify 知识库（RAG）的工作流程。系统通过向量检索将用户问题与知识库文档片段关联，再由大模型生成精准答案。</p>
             </div>
             <div class="sequence-diagram-container">
                 <svg viewBox="0 0 900 520" class="sequence-diagram">
@@ -1525,10 +1717,10 @@
                 <div class="step-item">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <div class="step-title">安装 Cherry Studio</div>
-                        <div class="step-desc">下载并安装 Cherry Studio 客户端，配置本地 Ollama 接口</div>
+                        <div class="step-title">部署 Dify 平台</div>
+                        <div class="step-desc">通过 Docker Compose 一键部署 Dify，配置本地 Ollama 模型提供商</div>
                         <div class="step-code">
-                            <code># 下载地址：https://github.com/CherryHQ/cherry-studio/releases<br># 配置 Ollama 地址：http://localhost:11434</code>
+                            <code># 克隆 Dify 代码仓库<br>git clone https://github.com/langgenius/dify.git<br>cd dify/docker<br>cp .env.example .env<br># 启动服务<br>docker compose up -d<br># 访问地址：http://localhost/install<br># 配置 Ollama 模型：设置 → 模型供应商 → Ollama → 填写 http://host.docker.internal:11434</code>
                         </div>
                     </div>
                 </div>
@@ -1536,9 +1728,9 @@
                     <div class="step-number">5</div>
                     <div class="step-content">
                         <div class="step-title">创建知识库</div>
-                        <div class="step-desc">在 Cherry Studio 中创建知识库，导入地震安评和合同文档</div>
+                        <div class="step-desc">在 Dify 中创建知识库，导入地震安评和合同文档</div>
                         <div class="step-code">
-                            <code># 1. 点击"知识库" → "新建知识库"<br># 2. 选择 Embedding 模型：nomic-embed-text<br># 3. 上传文档：支持 PDF、Word、TXT 格式<br># 4. 等待向量化完成</code>
+                            <code># 1. 进入"知识库" → "创建知识库"<br># 2. 选择索引方式：高质量模式（调用 nomic-embed-text）<br># 3. 上传文档：支持 PDF、Word、TXT 等格式<br># 4. 配置分段规则：自动分段 / 自定义分段标识<br># 5. 等待向量化处理完成</code>
                         </div>
                     </div>
                 </div>
@@ -1669,12 +1861,12 @@
                         <div class="improvement-item-title">增加 WebUI 团队协作</div>
                     </div>
                     <div class="improvement-item-content">
-                        Cherry Studio 为单机版客户端，缺少 Web 访问能力和团队协作功能，知识库难以共享和统一管理。
+                        虽然 Dify 已提供 Web 访问与基础团队协作能力，但在大规模企业场景下，仍可进一步集成 SSO 单点登录、精细化权限管控及审计日志等功能。
                     </div>
                     <div class="improvement-solution">
                         <div class="improvement-solution-title">💡 优化建议</div>
                         <div class="improvement-solution-content">
-                            部署 Dify 或自建 Web 服务，提供浏览器访问入口；集成企业微信/飞书登录，实现团队成员权限管理和知识库共享。
+                            配置企业微信/钉钉/飞书 SSO 登录；开启操作审计日志；按部门/项目划分知识库可见范围，实现企业级权限管控。
                         </div>
                     </div>
                 </div>

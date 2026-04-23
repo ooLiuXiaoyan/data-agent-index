@@ -1,0 +1,95 @@
+INFO:     Started server process [51987]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+🚀 启动知识库智能体 Mock API 服务...
+📡 API地址: http://localhost:8000
+📝 当前为演示模式，返回模拟数据
+⚠️  如需完整功能，请在支持的环境中安装 chromadb + sentence-transformers
+INFO:     127.0.0.1:64633 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64670 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64670 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64674 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64674 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64674 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64670 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64691 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64708 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64708 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64710 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64717 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64717 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64719 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64723 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64725 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64736 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64738 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64766 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64766 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64776 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64860 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64860 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64862 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64944 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64944 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64952 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64952 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64952 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65068 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65068 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65070 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65311 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65311 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65313 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65374 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65374 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65376 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65384 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65384 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65384 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65384 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65384 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65381 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49960 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49962 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49966 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49966 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49969 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49974 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49974 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49977 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50138 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50138 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50140 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50163 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50163 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50163 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50186 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50186 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50188 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50198 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50198 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50200 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50212 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50212 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50214 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50220 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50222 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50220 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50230 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50230 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50232 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50236 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50236 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50238 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50242 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50242 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50244 - "GET /api/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50253 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50253 - "GET /api/files HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50255 - "GET /api/stats HTTP/1.1" 200 OK
