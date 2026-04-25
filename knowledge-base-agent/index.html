@@ -1073,6 +1073,187 @@
          ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-blue);
         }
+
+        /* 更新日志弹窗 */
+        .update-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 58, 122, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .update-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .update-modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 560px;
+            max-height: 80vh;
+            box-shadow: 0 20px 60px rgba(13, 58, 122, 0.3);
+            border: 1px solid var(--border-color);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .update-modal-overlay.active .update-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .update-modal-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            padding: 24px 30px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .update-modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .update-version-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .update-modal-body {
+            padding: 24px 30px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .update-log-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .update-log-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .update-log-version {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .update-log-version .version-tag {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .update-log-version .version-date {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .update-log-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .update-log-list li {
+            padding: 6px 0 6px 24px;
+            position: relative;
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .update-log-list li::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 14px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+        }
+
+        .update-log-list li.new-feature::before {
+            background: #28a745;
+        }
+
+        .update-log-list li.bugfix::before {
+            background: #f0ad4e;
+        }
+
+        .update-log-list li.optimize::before {
+            background: var(--primary-blue);
+        }
+
+        .update-modal-footer {
+            padding: 16px 30px 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .update-btn {
+            padding: 10px 28px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .update-btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            color: var(--white);
+        }
+
+        .update-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(26, 95, 180, 0.3);
+        }
+
+        .update-btn-secondary {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .update-btn-secondary:hover {
+            background: var(--border-color);
+        }
     </style>
 </head>
 
@@ -3013,7 +3194,109 @@ curl http://localhost:11434/api/embeddings -d '{
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeTechDrawer();
         });
+
+        // ==================== 系统更新日志 ====================
+        (function() {
+            const CURRENT_VERSION = 'v1.2.0';
+            const STORAGE_KEY = 'kba_version_seen';
+
+            const updateLogs = [
+                {
+                    version: 'v1.2.0',
+                    date: '2025-04-23',
+                    items: [
+                        { text: '新增【海纳设想】模块，展示重大工程地震安全性评价咨询应用场景', type: 'new-feature' },
+                        { text: '新增系统更新日志弹窗，更新后首次访问自动提示', type: 'new-feature' },
+                        { text: '优化知识更新模块图标与内容描述', type: 'optimize' }
+                    ]
+                },
+                {
+                    version: 'v1.1.0',
+                    date: '2025-04-23',
+                    items: [
+                        { text: '修复 API_BASE 自适应逻辑，支持 HTTPS 域名部署访问', type: 'bugfix' },
+                        { text: '新增 Mock API 演示模式，降低本地部署依赖门槛', type: 'new-feature' },
+                        { text: '新增 .gitignore 配置，排除日志与缓存文件', type: 'optimize' },
+                        { text: '新增 GitHub Pages 部署支持（docs 目录 + gh-pages 分支）', type: 'new-feature' }
+                    ]
+                },
+                {
+                    version: 'v1.0.0',
+                    date: '2025-04-08',
+                    items: [
+                        { text: '知识库智能体系统初始版本上线', type: 'new-feature' },
+                        { text: '支持技术路线展示、案例演示、部署案例三大模块', type: 'new-feature' },
+                        { text: '集成 ChromaDB 向量数据库与 BGE 中文 Embedding 模型', type: 'new-feature' },
+                        { text: '支持 PDF 自动解析、文本切分、向量化存储与语义检索', type: 'new-feature' }
+                    ]
+                }
+            ];
+
+            function renderUpdateLog() {
+                const container = document.getElementById('updateLogContent');
+                if (!container) return;
+                container.innerHTML = updateLogs.map(log => `
+                    <div class="update-log-item">
+                        <div class="update-log-version">
+                            <span class="version-tag">${log.version}</span>
+                            <span class="version-date">${log.date}</span>
+                        </div>
+                        <ul class="update-log-list">
+                            ${log.items.map(item => `<li class="${item.type}">${item.text}</li>`).join('')}
+                        </ul>
+                    </div>
+                `).join('');
+            }
+
+            function showUpdateModal() {
+                const overlay = document.getElementById('updateModal');
+                if (!overlay) return;
+                renderUpdateLog();
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeUpdateModal() {
+                const overlay = document.getElementById('updateModal');
+                if (!overlay) return;
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                localStorage.setItem(STORAGE_KEY, CURRENT_VERSION);
+            }
+
+            document.getElementById('updateModalClose')?.addEventListener('click', closeUpdateModal);
+            document.getElementById('updateModalConfirm')?.addEventListener('click', closeUpdateModal);
+            document.getElementById('updateModal')?.addEventListener('click', (e) => {
+                if (e.target.id === 'updateModal') closeUpdateModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeUpdateModal();
+            });
+
+            const lastSeen = localStorage.getItem(STORAGE_KEY);
+            if (lastSeen !== CURRENT_VERSION) {
+                document.addEventListener('DOMContentLoaded', showUpdateModal);
+            }
+        })();
     </script>
+
+    <!-- 更新日志弹窗 -->
+    <div class="update-modal-overlay" id="updateModal">
+        <div class="update-modal">
+            <div class="update-modal-header">
+                <h3><i class="fas fa-bullhorn"></i> 系统更新日志</h3>
+                <span class="update-version-badge" id="updateCurrentVersion">v1.2.0</span>
+            </div>
+            <div class="update-modal-body" id="updateLogContent">
+                <!-- 内容由 JS 动态渲染 -->
+            </div>
+            <div class="update-modal-footer">
+                <button class="update-btn update-btn-primary" id="updateModalConfirm">
+                    <i class="fas fa-check"></i> 知道了
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
