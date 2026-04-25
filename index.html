@@ -3264,18 +3264,37 @@ curl http://localhost:11434/api/embeddings -d '{
                 localStorage.setItem(STORAGE_KEY, CURRENT_VERSION);
             }
 
-            document.getElementById('updateModalClose')?.addEventListener('click', closeUpdateModal);
-            document.getElementById('updateModalConfirm')?.addEventListener('click', closeUpdateModal);
-            document.getElementById('updateModal')?.addEventListener('click', (e) => {
-                if (e.target.id === 'updateModal') closeUpdateModal();
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeUpdateModal();
-            });
+            function bindEvents() {
+                const confirmBtn = document.getElementById('updateModalConfirm');
+                const closeBtn = document.getElementById('updateModalClose');
+                const overlay = document.getElementById('updateModal');
+
+                if (confirmBtn) {
+                    confirmBtn.addEventListener('click', closeUpdateModal);
+                }
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', closeUpdateModal);
+                }
+                if (overlay) {
+                    overlay.addEventListener('click', (e) => {
+                        if (e.target.id === 'updateModal') closeUpdateModal();
+                    });
+                }
+            }
 
             const lastSeen = localStorage.getItem(STORAGE_KEY);
             if (lastSeen !== CURRENT_VERSION) {
-                document.addEventListener('DOMContentLoaded', showUpdateModal);
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => {
+                        bindEvents();
+                        showUpdateModal();
+                    });
+                } else {
+                    bindEvents();
+                    showUpdateModal();
+                }
+            } else {
+                bindEvents();
             }
         })();
     </script>
@@ -3285,7 +3304,12 @@ curl http://localhost:11434/api/embeddings -d '{
         <div class="update-modal">
             <div class="update-modal-header">
                 <h3><i class="fas fa-bullhorn"></i> 系统更新日志</h3>
-                <span class="update-version-badge" id="updateCurrentVersion">v1.2.0</span>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span class="update-version-badge" id="updateCurrentVersion">v1.2.0</span>
+                    <button id="updateModalClose" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 4px; line-height: 1;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
             <div class="update-modal-body" id="updateLogContent">
                 <!-- 内容由 JS 动态渲染 -->
